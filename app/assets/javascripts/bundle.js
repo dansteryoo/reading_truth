@@ -165,7 +165,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _util_devos_api_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/devos_api_util */ "./frontend/util/devos_api_util.js");
 
 var RECEIVE_DEVO = 'RECEIVE_DEVO';
-var CLEAR_DEVO_STATE = "CLEAR_DEVO_STATE";
+var CLEAR_DEVO_STATE = 'CLEAR_DEVO_STATE';
 var RECEIVE_DEVO_BOOK = 'RECEIVE_DEVO_BOOK';
 var RECEIVE_DEVO_INDEX = 'RECEIVE_DEVO_INDEX';
 var receiveDevoIndex = function receiveDevoIndex(devoIndex) {
@@ -277,7 +277,7 @@ var RECEIVE_NOTES = 'RECEIVE_NOTES';
 var RECEIVE_NOTE = 'RECEIVE_NOTE';
 var REMOVE_NOTE = 'REMOVE_NOTE';
 var RECEIVE_NOTE_ERRORS = 'RECEIVE_NOTE_ERRORS';
-var CLEAR_NOTE_STATE = "CLEAR_NOTE_STATE";
+var CLEAR_NOTE_STATE = 'CLEAR_NOTE_STATE';
 var receiveNotes = function receiveNotes(notes) {
   return {
     type: RECEIVE_NOTES,
@@ -567,8 +567,8 @@ var Homepage = function Homepage(_ref) {
       setRightOpen = _useState4[1];
 
   var currentUserId = JSON.stringify(currentUser.id);
-  var leftSide = leftOpen ? "open" : "closed";
-  var rightSide = rightOpen ? "open" : "closed";
+  var leftSide = leftOpen ? 'open' : 'closed';
+  var rightSide = rightOpen ? 'open' : 'closed';
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     clearErrors();
     return function () {
@@ -577,9 +577,34 @@ var Homepage = function Homepage(_ref) {
       localStorage.removeItem(currentUserId);
     };
   }, []);
+
+  var leftSideRender = function leftSideRender() {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "sidebar ".concat(leftSide)
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "left-header"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
+      className: "title"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Current Plan"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "left-content"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_sidenav_sidenav__WEBPACK_IMPORTED_MODULE_1__["default"], null)));
+  };
+
+  var rightSideRender = function rightSideRender() {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "sidebar ".concat(rightSide)
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "right-header"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
+      className: "title"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "My Notes"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "content"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_notes_notesForm__WEBPACK_IMPORTED_MODULE_3__["default"], null)));
+  };
   /******************************
    *           render           *
    ******************************/
+
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_navbar_navbar__WEBPACK_IMPORTED_MODULE_2__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     id: "layout"
@@ -594,20 +619,12 @@ var Homepage = function Homepage(_ref) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
     className: "fa fa-bars",
     "aria-hidden": "true"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "sidebar ".concat(leftSide)
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "left-header"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
-    className: "title"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Current Plan"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "left-content"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_sidenav_sidenav__WEBPACK_IMPORTED_MODULE_1__["default"], null)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  })), leftSideRender()), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     id: "main"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "main-header"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
-    className: "\n                        title\n                        ".concat("left-" + leftSide, "\n                        ").concat("right-" + rightSide, "\n                    ")
+    className: "\n                        title\n                        ".concat('left-' + leftSide, "\n                        ").concat('right-' + rightSide, "\n                    ")
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Welcome ", currentUser.first_name, "!"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "content"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_main_body_container__WEBPACK_IMPORTED_MODULE_8__["default"], null))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -621,15 +638,7 @@ var Homepage = function Homepage(_ref) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
     className: "fa fa-bars",
     "aria-hidden": "true"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "sidebar ".concat(rightSide)
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "right-header"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
-    className: "title"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "My Notes"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "content"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_notes_notesForm__WEBPACK_IMPORTED_MODULE_3__["default"], null))))));
+  })), rightSideRender())));
 };
 /******************************
  *       mapStateToProps      *
@@ -732,23 +741,24 @@ var MainBody = /*#__PURE__*/function (_React$Component) {
       renderDay: ''
     };
     _this.ESVpassageGetter = _this.ESVpassageGetter.bind(_assertThisInitialized(_this));
-    _this.renderDay = _this.renderDay.bind(_assertThisInitialized(_this));
     _this.myRef = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
     _this.toggleBookmark = _this.toggleBookmark.bind(_assertThisInitialized(_this));
     _this.toggleAudio = _this.toggleAudio.bind(_assertThisInitialized(_this));
+    _this.toggleMainBody = _this.toggleMainBody.bind(_assertThisInitialized(_this));
     _this.isMainBodyDevoNull = _this.isMainBodyDevoNull.bind(_assertThisInitialized(_this));
     _this.userBookmarkBlank = _this.userBookmarkBlank.bind(_assertThisInitialized(_this));
     _this.setBookmark = _this.setBookmark.bind(_assertThisInitialized(_this));
     _this.localStorageFunc = _this.localStorageFunc.bind(_assertThisInitialized(_this));
     _this.splitPassages = _this.splitPassages.bind(_assertThisInitialized(_this));
     _this.isValidNumber = _this.isValidNumber.bind(_assertThisInitialized(_this));
+    _this.findMainBodyIndex = _this.findMainBodyIndex.bind(_assertThisInitialized(_this));
     return _this;
-  }
+  } //---------- ESV.ORG API CALL ----------//
+
 
   _createClass(MainBody, [{
     key: "ESVpassageGetter",
-    value: //---------- ESV.ORG API CALL ----------//
-    function ESVpassageGetter(passages) {
+    value: function ESVpassageGetter(passages) {
       var _this2 = this;
 
       var esvKeys = [window.esv_one, window.esv_two, window.esv_three, window.esv_four, window.esv_five, window.esv_six];
@@ -758,7 +768,7 @@ var MainBody = /*#__PURE__*/function (_React$Component) {
         axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('https://api.esv.org/v3/passage/text/?', {
           crossDomain: true,
           params: {
-            'q': passage,
+            q: passage,
             'include-headings': false,
             'include-footnotes': false,
             'include-verse-numbers': false,
@@ -766,7 +776,7 @@ var MainBody = /*#__PURE__*/function (_React$Component) {
             'include-passage-references': false
           },
           headers: {
-            'Authorization': randomGen
+            Authorization: randomGen
           }
         }).then(function (res) {
           if (res.status === 200) {
@@ -803,7 +813,7 @@ var MainBody = /*#__PURE__*/function (_React$Component) {
     key: "splitPassages",
     value: function splitPassages(passages) {
       if (passages.length > 0) {
-        return passages.split(", ").map(function (ele) {
+        return passages.split(', ').map(function (ele) {
           return ele.trim();
         });
       }
@@ -890,10 +900,11 @@ var MainBody = /*#__PURE__*/function (_React$Component) {
 
       !this.isValidNumber(bookmarkId) && bookmarkBlank && currentUser.bookmark && bookmarkId !== currentUser.bookmark.id && this.setState({
         bookmarkId: currentUser.bookmark.id
-      }); //---------- SET renderDay to this.renderDay() ----------//
+      }); //---------- SET renderDay to this.findMainBodyIndex() + 1 ----------//
 
-      this.renderDay() && this.renderDay() !== renderDay && this.setState({
-        renderDay: this.renderDay()
+      var newRenderDay = this.findMainBodyIndex() + 1;
+      newRenderDay !== renderDay && this.setState({
+        renderDay: newRenderDay
       }); //---------- PREVENTS MULTIPLE this.setState on update ----------//
 
       mainBodyChanged && this.setState({
@@ -975,17 +986,17 @@ var MainBody = /*#__PURE__*/function (_React$Component) {
     value: function renderSummary() {
       var eleCount = [];
       return this.state.summary.split('\n').map(function (ele, i) {
-        var scripture = ele.slice(0, 17) === "Scripture Reading";
-        var text = ele.slice(0, 5) === "Text:";
-        var author_1 = ele.slice(0, 10) === "Written by";
-        var author_2 = ele.slice(0, 10) === "Written By";
+        var scripture = ele.slice(0, 17) === 'Scripture Reading';
+        var text = ele.slice(0, 5) === 'Text:';
+        var author_1 = ele.slice(0, 10) === 'Written by';
+        var author_2 = ele.slice(0, 10) === 'Written By';
         var eleCountMatch = eleCount[i - 1] === ele.trim() && ele.trim().length < 1; //---------- eleCount.push STORES each item into eleCount ----------//
 
-        scripture || text ? eleCount.push("") : eleCount.push(ele.trim());
+        scripture || text ? eleCount.push('') : eleCount.push(ele.trim());
 
         if (!eleCountMatch && !scripture && !text) {
-          if (author_1) ele = ele.replace("Written by", "By");
-          if (author_2) ele = ele.replace("Written By", "By");
+          if (author_1) ele = ele.replace('Written by', 'By');
+          if (author_2) ele = ele.replace('Written By', 'By');
           return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
             key: 'summary' + i
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, ele, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
@@ -993,17 +1004,35 @@ var MainBody = /*#__PURE__*/function (_React$Component) {
       });
     }
   }, {
-    key: "renderDay",
-    value: function renderDay() {
-      var _this4 = this;
-
-      var renderDay;
-      this.props.devoBook.forEach(function (each, i) {
-        if (each.id === _this4.state.id) {
-          renderDay = i + 1;
-        }
+    key: "findMainBodyIndex",
+    value: function findMainBodyIndex() {
+      var _this$props3 = this.props,
+          mainBodyDevo = _this$props3.mainBodyDevo,
+          devoBook = _this$props3.devoBook;
+      return devoBook.findIndex(function (devo) {
+        return devo.id === mainBodyDevo.id;
       });
-      return renderDay;
+    }
+  }, {
+    key: "toggleMainBody",
+    value: function toggleMainBody(type) {
+      var _this$props4 = this.props,
+          devoBook = _this$props4.devoBook,
+          fetchDevo = _this$props4.fetchDevo;
+      var mainBodyIndex = this.findMainBodyIndex();
+
+      switch (type) {
+        case 'previous':
+          if (mainBodyIndex === 0) return;
+          return fetchDevo(devoBook[mainBodyIndex - 1].id);
+
+        case 'next':
+          if (mainBodyIndex === devoBook.length - 1) return;
+          return fetchDevo(devoBook[mainBodyIndex + 1].id);
+
+        default:
+          return;
+      }
     }
   }, {
     key: "toggleBookmark",
@@ -1015,10 +1044,10 @@ var MainBody = /*#__PURE__*/function (_React$Component) {
           gender = _this$state3.gender,
           book = _this$state3.book,
           bookmarkId = _this$state3.bookmarkId;
-      var _this$props3 = this.props,
-          currentUser = _this$props3.currentUser,
-          createBookmark = _this$props3.createBookmark,
-          deleteBookmark = _this$props3.deleteBookmark;
+      var _this$props5 = this.props,
+          currentUser = _this$props5.currentUser,
+          createBookmark = _this$props5.createBookmark,
+          deleteBookmark = _this$props5.deleteBookmark;
       var bookmarkData = {
         gender: gender,
         book: book,
@@ -1066,31 +1095,47 @@ var MainBody = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this5 = this;
+      var _this4 = this;
 
       if (this.isMainBodyDevoNull() && !this.localStorageFunc('getCurrentPage')) return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null);
       this.state.bookmark && this.isValidNumber(this.state.bookmarkId) && this.localStorageFunc('setCurrentPage');
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "middle-container"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "devo-main-title-wrapper"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "devo-main-title"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
         className: "devo-main-day"
-      }, "Day ", this.state.renderDay, ":"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, this.state.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        id: "bookmark",
-        className: this.state.bookmark ? "fa fa-bookmark" : "fa fa-bookmark-o",
+      }, "Day ", this.state.renderDay, ":"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, this.state.title)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "devo-main-title-icons"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        id: "previous-arrow",
+        className: "fas fa-caret-left icons",
         onClick: function onClick() {
-          return _this5.toggleBookmark();
+          return _this4.toggleMainBody('previous');
+        }
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        id: "next-arrow",
+        className: "fas fa-caret-right icons",
+        onClick: function onClick() {
+          return _this4.toggleMainBody('next');
+        }
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        id: "max-mclean-audio",
+        className: "fa fa-volume-up icons",
+        onClick: function onClick() {
+          return _this4.toggleAudio();
         },
         "aria-hidden": "true"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        id: "max-mclean-audio",
-        className: "fa fa-volume-up",
+        id: "bookmark",
+        className: this.state.bookmark ? 'fa fa-bookmark icons' : 'fa fa-bookmark-o icons',
         onClick: function onClick() {
-          return _this5.toggleAudio();
+          return _this4.toggleBookmark();
         },
         "aria-hidden": "true"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "devo-main-container",
         ref: this.myRef
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -1155,7 +1200,7 @@ var mapStateToProps = function mapStateToProps(_ref) {
     currentUser: users[session.id],
     mainBodyDevo: (_devos$mainBodyDevo = devos.mainBodyDevo) !== null && _devos$mainBodyDevo !== void 0 ? _devos$mainBodyDevo : null,
     errors: errors,
-    devoBook: Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_6__["reverseDevoBook"])(devoBook),
+    devoBook: Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_6__["sortDevoBook"])(devoBook),
     bookmark: bookmark
   };
 };
@@ -2898,14 +2943,14 @@ var ERRORS = ["ttl can't be blank", // 0 Title
 "bod can't be blank", // 1 Body
 "boo can't be blank", // 2 Book
 "day can't be blank", // 3 Day
-"day must only be a number" // 4 Number
+'day must only be a number' // 4 Number
 ];
 var defaultState = {
-  id: "",
-  title: "",
-  category: "",
-  day: "",
-  body: "",
+  id: '',
+  title: '',
+  category: '',
+  day: '',
+  body: '',
   updateErrors: [],
   updateForm: false,
   loading: false
@@ -2928,13 +2973,14 @@ var NotesForm = /*#__PURE__*/function (_React$Component) {
     _this.state = defaultState;
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
     _this.renderFormButton = _this.renderFormButton.bind(_assertThisInitialized(_this));
+    _this.prefillNoteForm = _this.prefillNoteForm.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(NotesForm, [{
     key: "dayIsNumber",
     value: function dayIsNumber(day) {
-      var splitStr = day.trim().split("");
+      var splitStr = day.trim().split('');
 
       for (var i = 0; i < splitStr.length; i++) {
         if (/^[a-zA-Z]*$/.test(splitStr[i])) return false;
@@ -3094,43 +3140,56 @@ var NotesForm = /*#__PURE__*/function (_React$Component) {
       }, 3000);
     }
   }, {
+    key: "prefillNoteForm",
+    value: function prefillNoteForm() {
+      var _this$props = this.props,
+          mainBodyDevo = _this$props.mainBodyDevo,
+          devoBook = _this$props.devoBook;
+      if (!mainBodyDevo || !devoBook) return;
+      var mainBodyIndex = devoBook.findIndex(function (devo) {
+        return devo.id === mainBodyDevo.id;
+      });
+      var book = mainBodyDevo.book,
+          title = mainBodyDevo.title;
+      return this.setState({
+        category: book,
+        title: title,
+        day: mainBodyIndex + 1
+      });
+    }
+  }, {
     key: "renderFormButton",
     value: function renderFormButton() {
       var _this7 = this;
 
-      if (this.state.updateForm) {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "button-container"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: "notes-form-submit-button",
-          disabled: this.state.loading,
-          type: "submit"
-        }, "Update"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "notes-form-cancel-x",
-          onClick: function onClick() {
-            return _this7.handleCancelUpdate();
-          }
-        }, "\u2715"));
-      } else {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "button-container"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: "notes-form-submit-button",
-          disabled: this.state.loading,
-          type: "submit"
-        }, "Create"));
-      }
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "button-container"
+      }, !this.state.updateForm && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "notes-form-prefill",
+        onClick: function onClick() {
+          return _this7.prefillNoteForm();
+        }
+      }, "\u2630"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "notes-form-submit-button",
+        disabled: this.state.loading,
+        type: "submit"
+      }, this.state.updateForm ? 'Update' : 'Create'), this.state.updateForm && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "notes-form-cancel-x",
+        onClick: function onClick() {
+          return _this7.handleCancelUpdate();
+        }
+      }, "\u2715"));
     }
   }, {
     key: "renderErrors",
     value: function renderErrors() {
       var updateErrors = this.state.updateErrors;
       var errorsHash = {
-        title: "",
-        body: "",
-        book: "",
-        day: "",
-        number: ""
+        title: '',
+        body: '',
+        book: '',
+        day: '',
+        number: ''
       };
       if (updateErrors.length < 1) return errorsHash;
       updateErrors.forEach(function (err) {
@@ -3145,11 +3204,11 @@ var NotesForm = /*#__PURE__*/function (_React$Component) {
           category = _this$state2.category,
           day = _this$state2.day,
           body = _this$state2.body;
-      if (!Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(title)) errorsHash.title = "";
-      if (!Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(body)) errorsHash.body = "";
-      if (!Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(category)) errorsHash.book = "";
-      if (!Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(day)) errorsHash.day = "";
-      if (this.dayIsNumber(day)) errorsHash.number = "";
+      if (!Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(title)) errorsHash.title = '';
+      if (!Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(body)) errorsHash.body = '';
+      if (!Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(category)) errorsHash.book = '';
+      if (!Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(day)) errorsHash.day = '';
+      if (this.dayIsNumber(day)) errorsHash.number = '';
       return errorsHash;
     }
   }, {
@@ -3180,7 +3239,7 @@ var NotesForm = /*#__PURE__*/function (_React$Component) {
           type: "text",
           className: "notes-form-input",
           value: this.state.category,
-          onChange: this.handleChange("category") // required
+          onChange: this.handleChange('category') // required
 
         })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "columns"
@@ -3190,22 +3249,22 @@ var NotesForm = /*#__PURE__*/function (_React$Component) {
           type: "text",
           className: "notes-form-input",
           value: this.state.day,
-          onChange: this.handleChange("day") // required
+          onChange: this.handleChange('day') // required
 
         }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "form-errors-notes"
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Title "), this.renderErrors().title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
           type: "text",
           className: "notes-form-input-title",
-          onChange: this.handleChange("title"),
+          onChange: this.handleChange('title'),
           value: this.state.title // required
 
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "form-errors-notes"
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Body "), this.renderErrors().body), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
           className: "notes-form-textarea",
-          placeholder: "Enter note here..",
-          onChange: this.handleChange("body"),
+          placeholder: 'Enter note here..',
+          onChange: this.handleChange('body'),
           value: this.state.body // required
 
         }), this.renderFormButton())), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null));
@@ -3221,6 +3280,8 @@ var NotesForm = /*#__PURE__*/function (_React$Component) {
 
 
 var mapStateToProps = function mapStateToProps(_ref) {
+  var _devos$mainBodyDevo;
+
   var session = _ref.session,
       users = _ref.users,
       errors = _ref.errors,
@@ -3229,10 +3290,12 @@ var mapStateToProps = function mapStateToProps(_ref) {
   var noteId = notes.noteId ? notes.noteId : {};
   var notesArray = notes.noteId ? [] : Object.values(notes);
   var noteErrors = notes.noteErrors ? notes.noteErrors : [];
+  var devoBook = devos.devoBook ? Object.values(devos.devoBook) : [];
   return {
     currentUser: users[session.id],
     errors: errors,
-    devos: Object.values(devos),
+    devoBook: Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["sortDevoBook"])(devoBook),
+    mainBodyDevo: (_devos$mainBodyDevo = devos.mainBodyDevo) !== null && _devos$mainBodyDevo !== void 0 ? _devos$mainBodyDevo : null,
     notes: notesArray,
     noteId: noteId,
     noteErrors: noteErrors
@@ -3826,7 +3889,7 @@ var SideNav = function SideNav(_ref) {
       fetchDevo = _ref.fetchDevo,
       devoBook = _ref.devoBook;
 
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""),
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
       _useState2 = _slicedToArray(_useState, 2),
       book = _useState2[0],
       setBook = _useState2[1];
@@ -3946,7 +4009,7 @@ var mapStateToProps = function mapStateToProps(_ref3) {
   var devoBook = devos.devoBook ? Object.values(devos.devoBook) : [];
   return {
     currentUser: users[session.id],
-    devoBook: Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_3__["reverseDevoBook"])(devoBook)
+    devoBook: Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_3__["sortDevoBook"])(devoBook)
   };
 };
 /******************************
@@ -4291,7 +4354,7 @@ var themeBookFormat = {
 /*!*********************************************!*\
   !*** ./frontend/helpers/helperFunctions.js ***!
   \*********************************************/
-/*! exports provided: searchRegexMatch, setPayload, sortTitles, sortAlphabetically, wordIsBlank, capitalizeFirstLetter, reverseDevoBook */
+/*! exports provided: searchRegexMatch, setPayload, sortTitles, sortAlphabetically, wordIsBlank, capitalizeFirstLetter, sortDevoBook, isValidNumber, isUserBookmarkBlank */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4302,7 +4365,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sortAlphabetically", function() { return sortAlphabetically; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "wordIsBlank", function() { return wordIsBlank; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "capitalizeFirstLetter", function() { return capitalizeFirstLetter; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "reverseDevoBook", function() { return reverseDevoBook; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sortDevoBook", function() { return sortDevoBook; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isValidNumber", function() { return isValidNumber; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isUserBookmarkBlank", function() { return isUserBookmarkBlank; });
 var searchRegexMatch = function searchRegexMatch(search) {
   var input = Array.from(search).reduce(function (a, v, i) {
     return "".concat(a, "[^").concat(search.substring(i), "]*?").concat(v);
@@ -4313,10 +4378,10 @@ var setPayload = function setPayload(data) {
   var payload;
   if (!data) return;
 
-  if (data.book.includes("&")) {
+  if (data.book.includes('&')) {
     payload = {
       gender: data.gender,
-      book: data.book.replace("&", "%26")
+      book: data.book.replace('&', '%26')
     };
   } else {
     payload = {
@@ -4350,7 +4415,7 @@ var wordIsBlank = function wordIsBlank(word) {
 var capitalizeFirstLetter = function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.toLocaleLowerCase().slice(1);
 };
-var reverseDevoBook = function reverseDevoBook(devoBook) {
+var sortDevoBook = function sortDevoBook(devoBook) {
   if (devoBook.length < 1) return devoBook;
   var _devoBook$ = devoBook[0],
       gender = _devoBook$.gender,
@@ -4360,7 +4425,7 @@ var reverseDevoBook = function reverseDevoBook(devoBook) {
     Leviticus: true,
     Numbers: true,
     Deuteronomy: true,
-    "1 & 2 Chronicles": true,
+    '1 & 2 Chronicles': true,
     Ezra: true,
     Isaiah: true,
     Jeremiah: true,
@@ -4369,11 +4434,17 @@ var reverseDevoBook = function reverseDevoBook(devoBook) {
     Philemon: true
   };
 
-  if (gender === "HE" || gender === "HE" && reverseCheck[book] || gender === "SHE" && book === "Judges" || book === "Job") {
+  if (gender === 'HE' || gender === 'HE' && reverseCheck[book] || gender === 'SHE' && book === 'Judges' || book === 'Job') {
     return devoBook.reverse();
   }
 
   return devoBook;
+};
+var isValidNumber = function isValidNumber(num) {
+  return typeof num === 'number';
+};
+var isUserBookmarkBlank = function isUserBookmarkBlank(bookmark) {
+  return bookmark == (undefined || null);
 };
 
 /***/ }),
@@ -4405,8 +4476,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-document.addEventListener("DOMContentLoaded", function () {
-  var root = document.getElementById("root");
+document.addEventListener('DOMContentLoaded', function () {
+  var root = document.getElementById('root');
   var store;
 
   if (window.currentUser) {
