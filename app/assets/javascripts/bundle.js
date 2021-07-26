@@ -2901,33 +2901,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_session_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../actions/session_actions */ "./frontend/actions/session_actions.js");
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 /* harmony import */ var _helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../helpers/helperFunctions */ "./frontend/helpers/helperFunctions.js");
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
@@ -2945,348 +2933,337 @@ var ERRORS = ["ttl can't be blank", // 0 Title
 "day can't be blank", // 3 Day
 'day must only be a number' // 4 Number
 ];
-var defaultState = {
+var EMOJI = {
+  star: '⭐️',
+  heart: '❤️',
+  fire: '🔥',
+  gold: '🏅'
+};
+var DEFAULT_STATE = {
   id: '',
   title: '',
-  category: '',
+  book: '',
   day: '',
   body: '',
   updateErrors: [],
-  updateForm: false,
-  loading: false
+  isUpdate: false,
+  isLoading: false
 };
 /******************************
  *     NotesForm Component    *
  ******************************/
 
-var NotesForm = /*#__PURE__*/function (_React$Component) {
-  _inherits(NotesForm, _React$Component);
+var NotesForm = function NotesForm(_ref) {
+  var mainBodyDevo = _ref.mainBodyDevo,
+      devoBook = _ref.devoBook,
+      fetchNotes = _ref.fetchNotes,
+      clearErrors = _ref.clearErrors,
+      createNote = _ref.createNote,
+      updateNote = _ref.updateNote,
+      noteId = _ref.noteId;
 
-  var _super = _createSuper(NotesForm);
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
+      _useState2 = _slicedToArray(_useState, 2),
+      id = _useState2[0],
+      setId = _useState2[1];
 
-  function NotesForm(props) {
-    var _this;
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
+      _useState4 = _slicedToArray(_useState3, 2),
+      title = _useState4[0],
+      setTitle = _useState4[1];
 
-    _classCallCheck(this, NotesForm);
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
+      _useState6 = _slicedToArray(_useState5, 2),
+      book = _useState6[0],
+      setBook = _useState6[1];
 
-    _this = _super.call(this, props);
-    _this.state = defaultState;
-    _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
-    _this.renderFormButton = _this.renderFormButton.bind(_assertThisInitialized(_this));
-    _this.prefillNoteForm = _this.prefillNoteForm.bind(_assertThisInitialized(_this));
-    return _this;
-  }
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
+      _useState8 = _slicedToArray(_useState7, 2),
+      day = _useState8[0],
+      setDay = _useState8[1];
 
-  _createClass(NotesForm, [{
-    key: "dayIsNumber",
-    value: function dayIsNumber(day) {
-      var splitStr = day.trim().split('');
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
+      _useState10 = _slicedToArray(_useState9, 2),
+      body = _useState10[0],
+      setBody = _useState10[1];
 
-      for (var i = 0; i < splitStr.length; i++) {
-        if (/^[a-zA-Z]*$/.test(splitStr[i])) return false;
-      }
+  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState12 = _slicedToArray(_useState11, 2),
+      updateErrors = _useState12[0],
+      setUpdateErrors = _useState12[1];
 
-      return true;
+  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+      _useState14 = _slicedToArray(_useState13, 2),
+      success = _useState14[0],
+      setSuccess = _useState14[1];
+
+  var _useState15 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+      _useState16 = _slicedToArray(_useState15, 2),
+      isUpdate = _useState16[0],
+      setIsUpdate = _useState16[1];
+
+  var _useState17 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+      _useState18 = _slicedToArray(_useState17, 2),
+      isLoading = _useState18[0],
+      setIsLoading = _useState18[1];
+
+  var mainBodyIndex = devoBook.findIndex(function (devo) {
+    return devo.id === (mainBodyDevo === null || mainBodyDevo === void 0 ? void 0 : mainBodyDevo.id);
+  });
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    fetchNotes();
+    return function () {
+      return clearErrors();
+    };
+  }, []);
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    if (typeof noteId.id === 'number') {
+      console.log(noteId);
+      setId(noteId.id);
+      setTitle(noteId.title);
+      setBook(noteId.category);
+      setDay(noteId.day);
+      setBody(noteId.body);
+      setIsUpdate(true);
     }
-  }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.props.fetchNotes();
+  }, [noteId]);
+
+  var handleEmoji = function handleEmoji(emoji) {
+    if (title.includes(emoji)) return;
+    var formTitle = (mainBodyDevo === null || mainBodyDevo === void 0 ? void 0 : mainBodyDevo.title) === title ? title + ' ' + emoji : title + emoji;
+    return setTitle(formTitle);
+  };
+
+  var renderEmojis = function renderEmojis() {
+    if (title.includes(mainBodyDevo === null || mainBodyDevo === void 0 ? void 0 : mainBodyDevo.title)) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-title-emojis"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        onClick: function onClick() {
+          return handleEmoji(EMOJI.star);
+        }
+      }, EMOJI.star), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        onClick: function onClick() {
+          return handleEmoji(EMOJI.heart);
+        }
+      }, EMOJI.heart), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        onClick: function onClick() {
+          return handleEmoji(EMOJI.fire);
+        }
+      }, EMOJI.fire), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        onClick: function onClick() {
+          return handleEmoji(EMOJI.gold);
+        }
+      }, EMOJI.gold));
     }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      this.props.clearErrors();
-    }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate(prevProps) {
-      var _this2 = this;
+  };
 
-      if (this.props.noteId !== prevProps.noteId) {
-        //---------- if this.props.noteId is a NUMBER then populate with update first and render update form ----------//
-        if (Number.isInteger(this.props.noteId.id)) {
-          var _this$props$noteId = this.props.noteId,
-              id = _this$props$noteId.id,
-              title = _this$props$noteId.title,
-              category = _this$props$noteId.category,
-              day = _this$props$noteId.day,
-              body = _this$props$noteId.body;
-          this.setState({
-            id: id,
-            title: title,
-            category: category,
-            day: day,
-            body: body,
-            updateForm: true
-          });
-        } //---------- if notes array is different from current props to prevProps ----------//
+  var setDefaultState = function setDefaultState() {
+    setId('');
+    setTitle('');
+    setBook('');
+    setDay('');
+    setBody('');
+  };
 
+  var handleSubmit = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(e) {
+      var noteObject, errArray;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              e.preventDefault();
+              setIsLoading(true);
+              noteObject = {
+                id: id,
+                title: title,
+                book: book,
+                day: day,
+                body: body
+              };
 
-        if (this.props.notes.length !== prevProps.notes.length) {
-          //---------- AND if current props array is empty SKIP reset state ----------//
-          if (this.props.notes.length < 1) return; //---------- OR if current props array is NOT EMPTY then reset state ----------//
+              if (!(Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(title) || Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(body) || Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(book) || Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(day) || !Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["dayIsNumber"])(day))) {
+                _context.next = 14;
+                break;
+              }
 
-          if (!this.props.notes.some(function (ele) {
-            return ele.id === _this2.state.id;
-          })) {
-            this.setState(defaultState);
+              errArray = [];
+              if (Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(title)) errArray.push(ERRORS[0]); // Title is blank
+
+              if (Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(body)) errArray.push(ERRORS[1]); // Body is blank
+
+              if (Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(book)) errArray.push(ERRORS[2]); // Book is blank
+
+              if (Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(day)) errArray.push(ERRORS[3]); // Day is blank
+
+              if (!Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["dayIsNumber"])(day) && !Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(day)) errArray.push(ERRORS[4]); // Day is !number
+
+              if (!(errArray.length > 0)) {
+                _context.next = 12;
+                break;
+              }
+
+              return _context.abrupt("return", setUpdateErrors(errArray));
+
+            case 12:
+              _context.next = 19;
+              break;
+
+            case 14:
+              id.length < 1 ? createNote(noteObject) : updateNote(noteObject);
+              setDefaultState();
+              setSuccess(true);
+              renderConfirmation();
+              fetchNotes();
+
+            case 19:
+            case "end":
+              return _context.stop();
           }
         }
+      }, _callee);
+    }));
+
+    return function handleSubmit(_x) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  var renderConfirmation = function renderConfirmation() {
+    window.setTimeout(function () {
+      setSuccess(false);
+    }, 3000);
+  };
+
+  var prefillNoteForm = function prefillNoteForm() {
+    var day = (mainBodyIndex + 1).toString();
+    setBook(mainBodyDevo === null || mainBodyDevo === void 0 ? void 0 : mainBodyDevo.book);
+    setTitle(mainBodyDevo === null || mainBodyDevo === void 0 ? void 0 : mainBodyDevo.title);
+    setDay(day);
+  };
+
+  var renderFormButton = function renderFormButton() {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "button-container"
+    }, !isUpdate && mainBodyDevo && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "notes-form-prefill",
+      onClick: function onClick() {
+        return prefillNoteForm();
       }
-    }
-  }, {
-    key: "handleChange",
-    value: function handleChange(f) {
-      var _this3 = this;
-
-      return function (e) {
-        return _this3.setState(_defineProperty({}, f, e.target.value));
-      };
-    }
-  }, {
-    key: "handleCancelUpdate",
-    value: function handleCancelUpdate() {
-      return this.setState(defaultState);
-    }
-  }, {
-    key: "handleSubmit",
-    value: function handleSubmit(e) {
-      var _this4 = this;
-
-      e.preventDefault();
-      this.setState({
-        loading: true
-      });
-      var _this$state = this.state,
-          id = _this$state.id,
-          title = _this$state.title,
-          category = _this$state.category,
-          day = _this$state.day,
-          body = _this$state.body;
-      var noteUpdate = {
-        id: id,
-        title: title,
-        category: category,
-        day: day,
-        body: body
-      };
-      var note = {
-        title: title,
-        category: category,
-        day: day,
-        body: body
-      };
-
-      if (Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(title) || Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(body) || Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(category) || Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(day) || !this.dayIsNumber(day)) {
-        var errorsArr = [];
-        if (Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(title)) errorsArr.push(ERRORS[0]); // Title is blank
-
-        if (Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(body)) errorsArr.push(ERRORS[1]); // Body is blank
-
-        if (Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(category)) errorsArr.push(ERRORS[2]); // Book is blank
-
-        if (Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(day)) errorsArr.push(ERRORS[3]); // Day is blank
-
-        if (!this.dayIsNumber(day) && !Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(day)) errorsArr.push(ERRORS[4]); // Day is !number
-
-        if (errorsArr.length > 0) return this.setState({
-          updateErrors: errorsArr
-        });
-      } else if (id.length < 1) {
-        this.props.createNote(note).then(function () {
-          return _this4.setState(_objectSpread(_objectSpread({}, defaultState), {}, {
-            success: true
-          }));
-        }).then(function () {
-          return _this4.renderSuccessMsg();
-        }).then(function () {
-          return _this4.props.fetchNotes();
-        });
-      } else {
-        this.props.updateNote(noteUpdate).then(function () {
-          return _this4.setState(_objectSpread(_objectSpread({}, defaultState), {}, {
-            update: true
-          }));
-        }).then(function () {
-          return _this4.renderUpdateMsg();
-        }).then(function () {
-          return _this4.props.fetchNotes();
-        });
+    }, "\u2630"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      className: "notes-form-submit-button",
+      disabled: isLoading,
+      type: "submit"
+    }, isUpdate ? 'Update' : 'Create'), isUpdate && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "notes-form-cancel-x",
+      onClick: function onClick() {
+        return setDefaultState();
       }
-    }
-  }, {
-    key: "renderSuccessMsg",
-    value: function renderSuccessMsg() {
-      var _this5 = this;
+    }, "\u2715"));
+  };
 
-      window.setTimeout(function () {
-        _this5.setState({
-          success: false,
-          loading: false
-        });
-      }, 3000);
-    }
-  }, {
-    key: "renderUpdateMsg",
-    value: function renderUpdateMsg() {
-      var _this6 = this;
+  var renderErrors = function renderErrors() {
+    var errObject = {
+      title: '',
+      body: '',
+      book: '',
+      day: '',
+      number: ''
+    };
+    if (updateErrors.length < 1) return errObject;
+    updateErrors.forEach(function (err) {
+      if (ERRORS.indexOf(err) === 0) errObject.title = err.slice(3);
+      if (ERRORS.indexOf(err) === 1) errObject.body = err.slice(3);
+      if (ERRORS.indexOf(err) === 2) errObject.book = err.slice(3);
+      if (ERRORS.indexOf(err) === 3) errObject.day = err.slice(3);
+      if (ERRORS.indexOf(err) === 4) errObject.number = err.slice(3);
+    });
+    if (!Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(title)) errObject.title = '';
+    if (!Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(body)) errObject.body = '';
+    if (!Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(book)) errObject.book = '';
+    if (!Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(day)) errObject.day = '';
+    if (Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["dayIsNumber"])(day)) errObject.number = '';
+    return errObject;
+  };
 
-      window.setTimeout(function () {
-        _this6.setState({
-          update: false,
-          loading: false
-        });
-      }, 3000);
-    }
-  }, {
-    key: "prefillNoteForm",
-    value: function prefillNoteForm() {
-      var _this$props = this.props,
-          mainBodyDevo = _this$props.mainBodyDevo,
-          devoBook = _this$props.devoBook;
-      if (!mainBodyDevo || !devoBook) return;
-      var mainBodyIndex = devoBook.findIndex(function (devo) {
-        return devo.id === mainBodyDevo.id;
-      });
-      var book = mainBodyDevo.book,
-          title = mainBodyDevo.title;
-      return this.setState({
-        category: book,
-        title: title,
-        day: mainBodyIndex + 1
-      });
-    }
-  }, {
-    key: "renderFormButton",
-    value: function renderFormButton() {
-      var _this7 = this;
+  if (success && !isUpdate) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "success-message-div"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Note Created!"));
+  } else if (success && isUpdate) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "success-message-div"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Note Updated!"));
+  } else {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "notes-form-container"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+      onSubmit: handleSubmit
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "notes-form"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "notes-form-book-day"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "columns"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "form-errors-notes"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Book "), " ", renderErrors().book), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      type: "text",
+      className: "notes-form-input",
+      value: book,
+      onChange: function onChange(e) {
+        return setBooko(e.target.value);
+      } // required
 
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "button-container"
-      }, !this.state.updateForm && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "notes-form-prefill",
-        onClick: function onClick() {
-          return _this7.prefillNoteForm();
-        }
-      }, "\u2630"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "notes-form-submit-button",
-        disabled: this.state.loading,
-        type: "submit"
-      }, this.state.updateForm ? 'Update' : 'Create'), this.state.updateForm && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "notes-form-cancel-x",
-        onClick: function onClick() {
-          return _this7.handleCancelUpdate();
-        }
-      }, "\u2715"));
-    }
-  }, {
-    key: "renderErrors",
-    value: function renderErrors() {
-      var updateErrors = this.state.updateErrors;
-      var errorsHash = {
-        title: '',
-        body: '',
-        book: '',
-        day: '',
-        number: ''
-      };
-      if (updateErrors.length < 1) return errorsHash;
-      updateErrors.forEach(function (err) {
-        if (ERRORS.indexOf(err) === 0) errorsHash.title = err.slice(3);
-        if (ERRORS.indexOf(err) === 1) errorsHash.body = err.slice(3);
-        if (ERRORS.indexOf(err) === 2) errorsHash.book = err.slice(3);
-        if (ERRORS.indexOf(err) === 3) errorsHash.day = err.slice(3);
-        if (ERRORS.indexOf(err) === 4) errorsHash.number = err.slice(3);
-      });
-      var _this$state2 = this.state,
-          title = _this$state2.title,
-          category = _this$state2.category,
-          day = _this$state2.day,
-          body = _this$state2.body;
-      if (!Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(title)) errorsHash.title = '';
-      if (!Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(body)) errorsHash.body = '';
-      if (!Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(category)) errorsHash.book = '';
-      if (!Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(day)) errorsHash.day = '';
-      if (this.dayIsNumber(day)) errorsHash.number = '';
-      return errorsHash;
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      if (this.state.success) {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "success-message-div"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Note Created!"));
-      } else if (this.state.update) {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "success-message-div"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Note Updated!"));
-      } else {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "notes-form-container"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
-          onSubmit: this.handleSubmit
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "notes-form"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "notes-form-book-day"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "columns"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "form-errors-notes"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Book "), " ", this.renderErrors().book), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-          type: "text",
-          className: "notes-form-input",
-          value: this.state.category,
-          onChange: this.handleChange('category') // required
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "columns"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "form-errors-notes"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Day# "), renderErrors().day, renderErrors().number), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      type: "text",
+      className: "notes-form-input",
+      value: day,
+      onChange: function onChange(e) {
+        return setDay(e.target.value);
+      } // required
 
-        })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "columns"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "form-errors-notes"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Day# "), this.renderErrors().day, this.renderErrors().number), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-          type: "text",
-          className: "notes-form-input",
-          value: this.state.day,
-          onChange: this.handleChange('day') // required
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "form-errors-notes"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Title "), renderErrors().title), renderEmojis(), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      type: "text",
+      className: "notes-form-input-title",
+      onChange: function onChange(e) {
+        return setTitle(e.target.value);
+      },
+      value: title // required
 
-        }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "form-errors-notes"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Title "), this.renderErrors().title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-          type: "text",
-          className: "notes-form-input-title",
-          onChange: this.handleChange('title'),
-          value: this.state.title // required
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "form-errors-notes"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Body "), renderErrors().body), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
+      className: "notes-form-textarea",
+      placeholder: 'Enter note here..',
+      onChange: function onChange(e) {
+        return setBody(e.target.value);
+      },
+      value: body // required
 
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "form-errors-notes"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Body "), this.renderErrors().body), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
-          className: "notes-form-textarea",
-          placeholder: 'Enter note here..',
-          onChange: this.handleChange('body'),
-          value: this.state.body // required
-
-        }), this.renderFormButton())), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null));
-      }
-    }
-  }]);
-
-  return NotesForm;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+    }), renderFormButton())), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null));
+  }
+};
 /******************************
  *       mapStateToProps      *
  ******************************/
 
 
-var mapStateToProps = function mapStateToProps(_ref) {
+var mapStateToProps = function mapStateToProps(_ref3) {
   var _devos$mainBodyDevo;
 
-  var session = _ref.session,
-      users = _ref.users,
-      errors = _ref.errors,
-      notes = _ref.notes,
-      devos = _ref.devos;
+  var session = _ref3.session,
+      users = _ref3.users,
+      errors = _ref3.errors,
+      notes = _ref3.notes,
+      devos = _ref3.devos;
   var noteId = notes.noteId ? notes.noteId : {};
   var notesArray = notes.noteId ? [] : Object.values(notes);
   var noteErrors = notes.noteErrors ? notes.noteErrors : [];
@@ -4354,7 +4331,7 @@ var themeBookFormat = {
 /*!*********************************************!*\
   !*** ./frontend/helpers/helperFunctions.js ***!
   \*********************************************/
-/*! exports provided: searchRegexMatch, setPayload, sortTitles, sortAlphabetically, wordIsBlank, capitalizeFirstLetter, sortDevoBook, isValidNumber, isUserBookmarkBlank */
+/*! exports provided: searchRegexMatch, setPayload, sortTitles, sortAlphabetically, wordIsBlank, capitalizeFirstLetter, sortDevoBook, isValidNumber, isUserBookmarkBlank, dayIsNumber */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4368,6 +4345,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sortDevoBook", function() { return sortDevoBook; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isValidNumber", function() { return isValidNumber; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isUserBookmarkBlank", function() { return isUserBookmarkBlank; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "dayIsNumber", function() { return dayIsNumber; });
 var searchRegexMatch = function searchRegexMatch(search) {
   var input = Array.from(search).reduce(function (a, v, i) {
     return "".concat(a, "[^").concat(search.substring(i), "]*?").concat(v);
@@ -4445,6 +4423,15 @@ var isValidNumber = function isValidNumber(num) {
 };
 var isUserBookmarkBlank = function isUserBookmarkBlank(bookmark) {
   return bookmark == (undefined || null);
+};
+var dayIsNumber = function dayIsNumber(day) {
+  var splitStr = day.trim().split('');
+
+  for (var i = 0; i < splitStr.length; i++) {
+    if (/^[a-zA-Z]*$/.test(splitStr[i])) return false;
+  }
+
+  return true;
 };
 
 /***/ }),
