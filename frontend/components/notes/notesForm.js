@@ -58,7 +58,6 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 
 	useEffect(() => {
 		if (typeof noteId.id === 'number') {
-			console.log(noteId)
 			setId(noteId.id);
 			setTitle(noteId.title);
 			setBook(noteId.category);

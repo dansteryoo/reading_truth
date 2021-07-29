@@ -3018,7 +3018,6 @@ var NotesForm = function NotesForm(_ref) {
   }, []);
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     if (typeof noteId.id === 'number') {
-      console.log(noteId);
       setId(noteId.id);
       setTitle(noteId.title);
       setBook(noteId.category);
