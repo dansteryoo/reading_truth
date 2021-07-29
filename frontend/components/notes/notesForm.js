@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { fetchNotes, updateNote, createNote } from '../../actions/note_actions';
 import { clearErrors } from '../../actions/session_actions';
 import { withRouter } from 'react-router-dom';
-import { wordIsBlank, sortDevoBook } from '../../helpers/helperFunctions';
+import { wordIsBlank, sortDevoBook, dayIsNumber } from '../../helpers/helperFunctions';
 
 /******************************
  *          CONSTANTS         *
@@ -17,283 +17,245 @@ const ERRORS = [
 	'day must only be a number', // 4 Number
 ];
 
-const defaultState = {
+const EMOJI = {
+	star: '⭐️',
+	heart: '❤️',
+	fire: '🔥',
+	gold: '🏅',
+};
+
+const DEFAULT_STATE = {
 	id: '',
 	title: '',
-	category: '',
+	book: '',
 	day: '',
 	body: '',
 	updateErrors: [],
-	updateForm: false,
-	loading: false,
+	isUpdate: false,
+	isLoading: false,
 };
 
 /******************************
  *     NotesForm Component    *
  ******************************/
 
-class NotesForm extends React.Component {
-	constructor(props) {
-		super(props);
+const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote, updateNote, noteId }) => {
+	const [id, setId] = useState('');
+	const [title, setTitle] = useState('');
+	const [book, setBook] = useState('');
+	const [day, setDay] = useState('');
+	const [body, setBody] = useState('');
+	const [updateErrors, setUpdateErrors] = useState([]);
+	const [success, setSuccess] = useState(false);
+	const [isUpdate, setIsUpdate] = useState(false);
+	const [isLoading, setIsLoading] = useState(false)
+	const mainBodyIndex = devoBook.findIndex((devo) => devo.id === mainBodyDevo?.id);
 
-		this.state = defaultState;
-		this.handleSubmit = this.handleSubmit.bind(this);
-		this.renderFormButton = this.renderFormButton.bind(this);
-		this.prefillNoteForm = this.prefillNoteForm.bind(this);
-	}
+	useEffect(() => {
+		fetchNotes();
+		return () => clearErrors();
+	}, []);
 
-	dayIsNumber(day) {
-		let splitStr = day.trim().split('');
-
-		for (let i = 0; i < splitStr.length; i++) {
-			if (/^[a-zA-Z]*$/.test(splitStr[i])) return false;
+	useEffect(() => {
+		if (typeof noteId.id === 'number') {
+			setId(noteId.id);
+			setTitle(noteId.title);
+			setBook(noteId.category);
+			setDay(noteId.day);
+			setBody(noteId.body);
+			setIsUpdate(true);
 		}
-		return true;
-	}
+	}, [noteId]);
 
-	componentDidMount() {
-		this.props.fetchNotes();
-	}
+	const handleEmoji = (emoji) => {
+		if (title.includes(emoji)) return;
+		let formTitle = mainBodyDevo?.title === title ? title + ' ' + emoji : title + emoji;
+		return setTitle(formTitle)
+	};
 
-	componentWillUnmount() {
-		this.props.clearErrors();
-	}
-
-	componentDidUpdate(prevProps) {
-		if (this.props.noteId !== prevProps.noteId) {
-			//---------- if this.props.noteId is a NUMBER then populate with update first and render update form ----------//
-			if (Number.isInteger(this.props.noteId.id)) {
-				const { id, title, category, day, body } = this.props.noteId;
-				this.setState({
-					id,
-					title,
-					category,
-					day,
-					body,
-					updateForm: true,
-				});
-			}
-
-			//---------- if notes array is different from current props to prevProps ----------//
-			if (this.props.notes.length !== prevProps.notes.length) {
-				//---------- AND if current props array is empty SKIP reset state ----------//
-				if (this.props.notes.length < 1) return;
-
-				//---------- OR if current props array is NOT EMPTY then reset state ----------//
-				if (!this.props.notes.some((ele) => ele.id === this.state.id)) {
-					this.setState(defaultState);
-				}
-			}
+	const renderEmojis = () => {
+		if (title.includes(mainBodyDevo?.title)) {
+			return (
+				<div className='form-title-emojis'>
+					<div onClick={() => handleEmoji(EMOJI.star)}>{EMOJI.star}</div>
+					<div onClick={() => handleEmoji(EMOJI.heart)}>{EMOJI.heart}</div>
+					<div onClick={() => handleEmoji(EMOJI.fire)}>{EMOJI.fire}</div>
+					<div onClick={() => handleEmoji(EMOJI.gold)}>{EMOJI.gold}</div>
+				</div>
+			);
 		}
-	}
+	};
 
-	handleChange(f) {
-		return (e) => this.setState({ [f]: e.target.value });
-	}
+	const setDefaultState = () => {
+		setId('');
+		setTitle('');
+		setBook('');
+		setDay('');
+		setBody('');
+	};
 
-	handleCancelUpdate() {
-		return this.setState(defaultState);
-	}
-
-	handleSubmit(e) {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		this.setState({ loading: true });
+		setIsLoading(true);
+		const noteObject = { id, title, book, day, body };
 
-		const { id, title, category, day, body } = this.state;
-		let noteUpdate = { id, title, category, day, body };
-		let note = { title, category, day, body };
-
-		if (wordIsBlank(title) || wordIsBlank(body) || wordIsBlank(category) || wordIsBlank(day) || !this.dayIsNumber(day)) {
-			let errorsArr = [];
-			if (wordIsBlank(title)) errorsArr.push(ERRORS[0]); // Title is blank
-			if (wordIsBlank(body)) errorsArr.push(ERRORS[1]); // Body is blank
-			if (wordIsBlank(category)) errorsArr.push(ERRORS[2]); // Book is blank
-			if (wordIsBlank(day)) errorsArr.push(ERRORS[3]); // Day is blank
-			if (!this.dayIsNumber(day) && !wordIsBlank(day)) errorsArr.push(ERRORS[4]); // Day is !number
-			if (errorsArr.length > 0) return this.setState({ updateErrors: errorsArr });
-		} else if (id.length < 1) {
-			this.props
-				.createNote(note)
-				.then(() =>
-					this.setState({
-						...defaultState,
-						success: true,
-					})
-				)
-				.then(() => this.renderSuccessMsg())
-				.then(() => this.props.fetchNotes());
+		if (wordIsBlank(title) || wordIsBlank(body) || wordIsBlank(book) || wordIsBlank(day) || !dayIsNumber(day)) {
+			let errArray = [];
+			if (wordIsBlank(title)) errArray.push(ERRORS[0]); // Title is blank
+			if (wordIsBlank(body)) errArray.push(ERRORS[1]); // Body is blank
+			if (wordIsBlank(book)) errArray.push(ERRORS[2]); // Book is blank
+			if (wordIsBlank(day)) errArray.push(ERRORS[3]); // Day is blank
+			if (!dayIsNumber(day) && !wordIsBlank(day)) errArray.push(ERRORS[4]); // Day is !number
+			if (errArray.length > 0) return setUpdateErrors(errArray);
 		} else {
-			this.props
-				.updateNote(noteUpdate)
-				.then(() =>
-					this.setState({
-						...defaultState,
-						update: true,
-					})
-				)
-				.then(() => this.renderUpdateMsg())
-				.then(() => this.props.fetchNotes());
+			id.length < 1 ? createNote(noteObject) : updateNote(noteObject);
+			setDefaultState();
+			setSuccess(true);
+			renderConfirmation();
+			fetchNotes();
 		}
-	}
+	};
 
-	renderSuccessMsg() {
+	const renderConfirmation = () => {
 		window.setTimeout(() => {
-			this.setState({ success: false, loading: false });
+			setSuccess(false);
 		}, 3000);
-	}
+	};
 
-	renderUpdateMsg() {
-		window.setTimeout(() => {
-			this.setState({ update: false, loading: false });
-		}, 3000);
-	}
+	const prefillNoteForm = () => {
+		const day = (mainBodyIndex + 1).toString();
+		setBook(mainBodyDevo?.book);
+		setTitle(mainBodyDevo?.title);
+		setDay(day);
+	};
 
-	prefillNoteForm() {
-		const { mainBodyDevo, devoBook } = this.props;
-		if (!mainBodyDevo || !devoBook) return;
-		const mainBodyIndex = devoBook.findIndex((devo) => devo.id === mainBodyDevo.id);
-		const { book, title } = mainBodyDevo;
-		return this.setState({
-			category: book,
-			title,
-			day: mainBodyIndex + 1,
-		});
-	}
-
-	renderFormButton() {
+	const renderFormButton = () => {
 		return (
 			<div className='button-container'>
-				{!this.state.updateForm && (
-					<div className='notes-form-prefill' onClick={() => this.prefillNoteForm()}>
+				{!isUpdate && mainBodyDevo && (
+					<div className='notes-form-prefill' onClick={() => prefillNoteForm()}>
 						&#9776;
 					</div>
 				)}
-				<button className='notes-form-submit-button' disabled={this.state.loading} type='submit'>
-					{this.state.updateForm ? 'Update' : 'Create'}
+				<button className='notes-form-submit-button' disabled={isLoading} type='submit'>
+					{isUpdate ? 'Update' : 'Create'}
 				</button>
-				{this.state.updateForm && (
-					<div className='notes-form-cancel-x' onClick={() => this.handleCancelUpdate()}>
+				{isUpdate && (
+					<div className='notes-form-cancel-x' onClick={() => setDefaultState()}>
 						&#10005;
 					</div>
 				)}
 			</div>
 		);
-	}
+	};
 
-	renderErrors() {
-		const { updateErrors } = this.state;
-
-		const errorsHash = {
+	const renderErrors = () => {
+		const errObject = {
 			title: '',
 			body: '',
 			book: '',
 			day: '',
 			number: '',
 		};
-
-		if (updateErrors.length < 1) return errorsHash;
+		if (updateErrors.length < 1) return errObject;
 
 		updateErrors.forEach((err) => {
-			if (ERRORS.indexOf(err) === 0) errorsHash.title = err.slice(3);
-			if (ERRORS.indexOf(err) === 1) errorsHash.body = err.slice(3);
-			if (ERRORS.indexOf(err) === 2) errorsHash.book = err.slice(3);
-			if (ERRORS.indexOf(err) === 3) errorsHash.day = err.slice(3);
-			if (ERRORS.indexOf(err) === 4) errorsHash.number = err.slice(3);
+			if (ERRORS.indexOf(err) === 0) errObject.title = err.slice(3);
+			if (ERRORS.indexOf(err) === 1) errObject.body = err.slice(3);
+			if (ERRORS.indexOf(err) === 2) errObject.book = err.slice(3);
+			if (ERRORS.indexOf(err) === 3) errObject.day = err.slice(3);
+			if (ERRORS.indexOf(err) === 4) errObject.number = err.slice(3);
 		});
 
-		const { title, category, day, body } = this.state;
+		if (!wordIsBlank(title)) errObject.title = '';
+		if (!wordIsBlank(body)) errObject.body = '';
+		if (!wordIsBlank(book)) errObject.book = '';
+		if (!wordIsBlank(day)) errObject.day = '';
+		if (dayIsNumber(day)) errObject.number = '';
 
-		if (!wordIsBlank(title)) errorsHash.title = '';
-		if (!wordIsBlank(body)) errorsHash.body = '';
-		if (!wordIsBlank(category)) errorsHash.book = '';
-		if (!wordIsBlank(day)) errorsHash.day = '';
-		if (this.dayIsNumber(day)) errorsHash.number = '';
+		return errObject;
+	};
 
-		return errorsHash;
-	}
-
-	render() {
-		if (this.state.success) {
-			return (
-				<div className='success-message-div'>
-					<span>Note Created!</span>
-				</div>
-			);
-		} else if (this.state.update) {
-			return (
-				<div className='success-message-div'>
-					<span>Note Updated!</span>
-				</div>
-			);
-		} else {
-			return (
-				<div className='notes-form-container'>
-					<form onSubmit={this.handleSubmit}>
-						<div className='notes-form'>
-							{/* categories and day */}
-							<div className='notes-form-book-day'>
-								<div className='columns'>
-									<div className='form-errors-notes'>
-										<label>Book </label> {this.renderErrors().book}
-									</div>
-									<input
-										type='text'
-										className='notes-form-input'
-										value={this.state.category}
-										onChange={this.handleChange('category')}
-										// required
-									/>
+	if (success && !isUpdate) {
+		return (
+			<div className='success-message-div'>
+				<span>Note Created!</span>
+			</div>
+		);
+	} else if (success && isUpdate) {
+		return (
+			<div className='success-message-div'>
+				<span>Note Updated!</span>
+			</div>
+		);
+	} else {
+		return (
+			<div className='notes-form-container'>
+				<form onSubmit={handleSubmit}>
+					<div className='notes-form'>
+						{/* categories and day */}
+						<div className='notes-form-book-day'>
+							<div className='columns'>
+								<div className='form-errors-notes'>
+									<label>Book </label> {renderErrors().book}
 								</div>
-								<div className='columns'>
-									<div className='form-errors-notes'>
-										<label>Day# </label>
-										{this.renderErrors().day}
-										{this.renderErrors().number}
-									</div>
-									<input
-										type='text'
-										className='notes-form-input'
-										value={this.state.day}
-										onChange={this.handleChange('day')}
-										// required
-									/>
+								<input
+									type='text'
+									className='notes-form-input'
+									value={book}
+									onChange={(e) => setBooko(e.target.value)}
+									// required
+								/>
+							</div>
+							<div className='columns'>
+								<div className='form-errors-notes'>
+									<label>Day# </label>
+									{renderErrors().day}
+									{renderErrors().number}
 								</div>
+								<input
+									type='text'
+									className='notes-form-input'
+									value={day}
+									onChange={(e) => setDay(e.target.value)}
+									// required
+								/>
 							</div>
-							{/* title */}
-							<div className='form-errors-notes'>
-								<label>Title </label>
-								{this.renderErrors().title}
-							</div>
-							<input
-								type='text'
-								className='notes-form-input-title'
-								onChange={this.handleChange('title')}
-								value={this.state.title}
-								// required
-							/>
-							{/* body */}
-							<div className='form-errors-notes'>
-								<label>Body </label>
-								{this.renderErrors().body}
-							</div>
-							<textarea
-								className='notes-form-textarea'
-								placeholder={'Enter note here..'}
-								onChange={this.handleChange('body')}
-								value={this.state.body}
-								// required
-							/>
-
-							{this.renderFormButton()}
 						</div>
-					</form>
+						{/* title */}
+						<div className='form-errors-notes'>
+							<label>Title </label>
+							{renderErrors().title}
+						</div>
+						{renderEmojis()}
+						<input
+							type='text'
+							className='notes-form-input-title'
+							onChange={(e) => setTitle(e.target.value)}
+							value={title}
+							// required
+						/>
+						{/* body */}
+						<div className='form-errors-notes'>
+							<label>Body </label>
+							{renderErrors().body}
+						</div>
+						<textarea
+							className='notes-form-textarea'
+							placeholder={'Enter note here..'}
+							onChange={(e) => setBody(e.target.value)}
+							value={body}
+							// required
+						/>
+						{renderFormButton()}
+					</div>
+				</form>
 
-					<br />
-				</div>
-			);
-		}
+				<br />
+			</div>
+		);
 	}
-}
+};
 
 /******************************
  *       mapStateToProps      *

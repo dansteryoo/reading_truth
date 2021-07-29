@@ -69,3 +69,12 @@ export const isValidNumber = (num) => {
 export const isUserBookmarkBlank = (bookmark) => {
 	return bookmark == (undefined || null);
 };
+
+export const dayIsNumber = (day) => {
+	let splitStr = day.trim().split('');
+	for (let i = 0; i < splitStr.length; i++) {
+		if (/^[a-zA-Z]*$/.test(splitStr[i])) return false;
+	}
+	return true;
+};
+
