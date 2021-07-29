@@ -210,3 +210,16 @@ $darkpink: #ff8da1;
   margin-bottom: 4px;
   font-weight: 400;
 }
+
+  .notes-title-wrapper {
+    display: inline-flex;
+}
+
+  .notes-title-emojis {
+    display: inline-flex;
+    margin-bottom: 10px;
+}
+
+#notes-emoji:hover {
+    cursor: pointer;
+}

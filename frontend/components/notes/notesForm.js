@@ -68,19 +68,31 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 	}, [noteId]);
 
 	const handleEmoji = (emoji) => {
-		if (title.includes(emoji)) return;
-		let formTitle = mainBodyDevo?.title === title ? title + ' ' + emoji : title + emoji;
-		return setTitle(formTitle)
+		let newTitle;
+		if (title.includes(emoji)) {
+			newTitle = title.replace(emoji, '');
+		} else {
+			newTitle = mainBodyDevo?.title === title ? title + ' ' + emoji : title + emoji;
+		}
+		return setTitle(newTitle);
 	};
 
 	const renderEmojis = () => {
 		if (title.includes(mainBodyDevo?.title)) {
 			return (
-				<div className='form-title-emojis'>
-					<div onClick={() => handleEmoji(EMOJI.star)}>{EMOJI.star}</div>
-					<div onClick={() => handleEmoji(EMOJI.heart)}>{EMOJI.heart}</div>
-					<div onClick={() => handleEmoji(EMOJI.fire)}>{EMOJI.fire}</div>
-					<div onClick={() => handleEmoji(EMOJI.gold)}>{EMOJI.gold}</div>
+				<div className='notes-title-emojis'>
+					<div id='notes-emoji' onClick={() => handleEmoji(EMOJI.star)}>
+						{EMOJI.star}
+					</div>
+					<div id='notes-emoji' onClick={() => handleEmoji(EMOJI.heart)}>
+						{EMOJI.heart}
+					</div>
+					<div id='notes-emoji' onClick={() => handleEmoji(EMOJI.fire)}>
+						{EMOJI.fire}
+					</div>
+					<div id='notes-emoji' onClick={() => handleEmoji(EMOJI.gold)}>
+						{EMOJI.gold}
+					</div>
 				</div>
 			);
 		}
@@ -172,7 +184,7 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 		if (!wordIsBlank(book)) errObject.book = '';
 		if (!wordIsBlank(day)) errObject.day = '';
 		if (dayIsNumber(day)) errObject.number = '';
-
+		
 		return errObject;
 	};
 
@@ -203,7 +215,7 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 									type='text'
 									className='notes-form-input'
 									value={book}
-									onChange={(e) => setBooko(e.target.value)}
+									onChange={(e) => setBook(e.target.value)}
 									// required
 								/>
 							</div>
@@ -223,11 +235,13 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 							</div>
 						</div>
 						{/* title */}
-						<div className='form-errors-notes'>
-							<label>Title </label>
-							{renderErrors().title}
+						<div className='notes-title-wrapper'>
+							<div className='form-errors-notes'>
+								<label>Title </label>
+								{renderErrors().title}
+							</div>
+							{renderEmojis()}
 						</div>
-						{renderEmojis()}
 						<input
 							type='text'
 							className='notes-form-input-title'

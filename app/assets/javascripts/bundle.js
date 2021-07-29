@@ -3028,28 +3028,38 @@ var NotesForm = function NotesForm(_ref) {
   }, [noteId]);
 
   var handleEmoji = function handleEmoji(emoji) {
-    if (title.includes(emoji)) return;
-    var formTitle = (mainBodyDevo === null || mainBodyDevo === void 0 ? void 0 : mainBodyDevo.title) === title ? title + ' ' + emoji : title + emoji;
-    return setTitle(formTitle);
+    var newTitle;
+
+    if (title.includes(emoji)) {
+      newTitle = title.replace(emoji, '');
+    } else {
+      newTitle = (mainBodyDevo === null || mainBodyDevo === void 0 ? void 0 : mainBodyDevo.title) === title ? title + ' ' + emoji : title + emoji;
+    }
+
+    return setTitle(newTitle);
   };
 
   var renderEmojis = function renderEmojis() {
     if (title.includes(mainBodyDevo === null || mainBodyDevo === void 0 ? void 0 : mainBodyDevo.title)) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "form-title-emojis"
+        className: "notes-title-emojis"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "notes-emoji",
         onClick: function onClick() {
           return handleEmoji(EMOJI.star);
         }
       }, EMOJI.star), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "notes-emoji",
         onClick: function onClick() {
           return handleEmoji(EMOJI.heart);
         }
       }, EMOJI.heart), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "notes-emoji",
         onClick: function onClick() {
           return handleEmoji(EMOJI.fire);
         }
       }, EMOJI.fire), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "notes-emoji",
         onClick: function onClick() {
           return handleEmoji(EMOJI.gold);
         }
@@ -3212,7 +3222,7 @@ var NotesForm = function NotesForm(_ref) {
       className: "notes-form-input",
       value: book,
       onChange: function onChange(e) {
-        return setBooko(e.target.value);
+        return setBook(e.target.value);
       } // required
 
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -3228,8 +3238,10 @@ var NotesForm = function NotesForm(_ref) {
       } // required
 
     }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "notes-title-wrapper"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "form-errors-notes"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Title "), renderErrors().title), renderEmojis(), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Title "), renderErrors().title), renderEmojis()), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
       type: "text",
       className: "notes-form-input-title",
       onChange: function onChange(e) {
