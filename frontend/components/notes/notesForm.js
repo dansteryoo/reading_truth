@@ -24,17 +24,6 @@ const EMOJI = {
 	gold: '🏅',
 };
 
-const DEFAULT_STATE = {
-	id: '',
-	title: '',
-	book: '',
-	day: '',
-	body: '',
-	updateErrors: [],
-	isUpdate: false,
-	isLoading: false,
-};
-
 /******************************
  *     NotesForm Component    *
  ******************************/
@@ -49,6 +38,7 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 	const [success, setSuccess] = useState(false);
 	const [isUpdate, setIsUpdate] = useState(false);
 	const [isLoading, setIsLoading] = useState(false)
+	const [isPrefilled, setIsPrefilled] = useState(false);
 	const mainBodyIndex = devoBook.findIndex((devo) => devo.id === mainBodyDevo?.id);
 
 	useEffect(() => {
@@ -98,15 +88,21 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 		}
 	};
 
-	const setDefaultState = () => {
+	const handleSetDefaultState = () => {
 		setId('');
 		setTitle('');
 		setBook('');
 		setDay('');
 		setBody('');
+		setUpdateErrors([])
+		setSuccess(false);
+		setIsUpdate(false);
+		setIsLoading(false);
+		setIsPrefilled(false);
 	};
 
 	const handleSubmit = async (e) => {
+		console.log('handleSubmit')
 		e.preventDefault();
 		setIsLoading(true);
 		const noteObject = { id, title, book, day, body };
@@ -121,7 +117,7 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 			if (errArray.length > 0) return setUpdateErrors(errArray);
 		} else {
 			id.length < 1 ? createNote(noteObject) : updateNote(noteObject);
-			setDefaultState();
+			handleSetDefaultState();
 			setSuccess(true);
 			renderConfirmation();
 			fetchNotes();
@@ -139,21 +135,22 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 		setBook(mainBodyDevo?.book);
 		setTitle(mainBodyDevo?.title);
 		setDay(day);
+		setIsPrefilled(true)
 	};
 
 	const renderFormButton = () => {
 		return (
 			<div className='button-container'>
-				{!isUpdate && mainBodyDevo && (
+				{!isUpdate && !isPrefilled && (
 					<div className='notes-form-prefill' onClick={() => prefillNoteForm()}>
 						&#9776;
 					</div>
 				)}
-				<button className='notes-form-submit-button' disabled={isLoading} type='submit'>
+				<button className='notes-form-submit-button' disabled={isLoading} onClick={(e) => handleSubmit(e)}>
 					{isUpdate ? 'Update' : 'Create'}
 				</button>
-				{isUpdate && (
-					<div className='notes-form-cancel-x' onClick={() => setDefaultState()}>
+				{(isUpdate || isPrefilled) && (
+					<div className='notes-form-cancel-x' onClick={() => handleSetDefaultState()}>
 						&#10005;
 					</div>
 				)}

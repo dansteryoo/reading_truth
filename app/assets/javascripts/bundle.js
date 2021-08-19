@@ -2939,16 +2939,6 @@ var EMOJI = {
   fire: '🔥',
   gold: '🏅'
 };
-var DEFAULT_STATE = {
-  id: '',
-  title: '',
-  book: '',
-  day: '',
-  body: '',
-  updateErrors: [],
-  isUpdate: false,
-  isLoading: false
-};
 /******************************
  *     NotesForm Component    *
  ******************************/
@@ -3006,6 +2996,11 @@ var NotesForm = function NotesForm(_ref) {
       _useState18 = _slicedToArray(_useState17, 2),
       isLoading = _useState18[0],
       setIsLoading = _useState18[1];
+
+  var _useState19 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+      _useState20 = _slicedToArray(_useState19, 2),
+      isPrefilled = _useState20[0],
+      setIsPrefilled = _useState20[1];
 
   var mainBodyIndex = devoBook.findIndex(function (devo) {
     return devo.id === (mainBodyDevo === null || mainBodyDevo === void 0 ? void 0 : mainBodyDevo.id);
@@ -3067,12 +3062,17 @@ var NotesForm = function NotesForm(_ref) {
     }
   };
 
-  var setDefaultState = function setDefaultState() {
+  var handleSetDefaultState = function handleSetDefaultState() {
     setId('');
     setTitle('');
     setBook('');
     setDay('');
     setBody('');
+    setUpdateErrors([]);
+    setSuccess(false);
+    setIsUpdate(false);
+    setIsLoading(false);
+    setIsPrefilled(false);
   };
 
   var handleSubmit = /*#__PURE__*/function () {
@@ -3082,6 +3082,7 @@ var NotesForm = function NotesForm(_ref) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              console.log('handleSubmit');
               e.preventDefault();
               setIsLoading(true);
               noteObject = {
@@ -3093,7 +3094,7 @@ var NotesForm = function NotesForm(_ref) {
               };
 
               if (!(Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(title) || Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(body) || Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(book) || Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(day) || !Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["dayIsNumber"])(day))) {
-                _context.next = 14;
+                _context.next = 15;
                 break;
               }
 
@@ -3109,24 +3110,24 @@ var NotesForm = function NotesForm(_ref) {
               if (!Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["dayIsNumber"])(day) && !Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(day)) errArray.push(ERRORS[4]); // Day is !number
 
               if (!(errArray.length > 0)) {
-                _context.next = 12;
+                _context.next = 13;
                 break;
               }
 
               return _context.abrupt("return", setUpdateErrors(errArray));
 
-            case 12:
-              _context.next = 19;
+            case 13:
+              _context.next = 20;
               break;
 
-            case 14:
+            case 15:
               id.length < 1 ? createNote(noteObject) : updateNote(noteObject);
-              setDefaultState();
+              handleSetDefaultState();
               setSuccess(true);
               renderConfirmation();
               fetchNotes();
 
-            case 19:
+            case 20:
             case "end":
               return _context.stop();
           }
@@ -3150,12 +3151,13 @@ var NotesForm = function NotesForm(_ref) {
     setBook(mainBodyDevo === null || mainBodyDevo === void 0 ? void 0 : mainBodyDevo.book);
     setTitle(mainBodyDevo === null || mainBodyDevo === void 0 ? void 0 : mainBodyDevo.title);
     setDay(day);
+    setIsPrefilled(true);
   };
 
   var renderFormButton = function renderFormButton() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "button-container"
-    }, !isUpdate && mainBodyDevo && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    }, !isUpdate && !isPrefilled && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "notes-form-prefill",
       onClick: function onClick() {
         return prefillNoteForm();
@@ -3163,11 +3165,13 @@ var NotesForm = function NotesForm(_ref) {
     }, "\u2630"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
       className: "notes-form-submit-button",
       disabled: isLoading,
-      type: "submit"
-    }, isUpdate ? 'Update' : 'Create'), isUpdate && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      onClick: function onClick(e) {
+        return handleSubmit(e);
+      }
+    }, isUpdate ? 'Update' : 'Create'), (isUpdate || isPrefilled) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "notes-form-cancel-x",
       onClick: function onClick() {
-        return setDefaultState();
+        return handleSetDefaultState();
       }
     }, "\u2715"));
   };
