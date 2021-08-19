@@ -2952,7 +2952,7 @@ var NotesForm = function NotesForm(_ref) {
       updateNote = _ref.updateNote,
       noteId = _ref.noteId;
 
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(!!noteId.id),
       _useState2 = _slicedToArray(_useState, 2),
       id = _useState2[0],
       setId = _useState2[1];
@@ -3002,13 +3002,19 @@ var NotesForm = function NotesForm(_ref) {
       isPrefilled = _useState20[0],
       setIsPrefilled = _useState20[1];
 
+  var _useState21 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+      _useState22 = _slicedToArray(_useState21, 2),
+      isNoteCreated = _useState22[0],
+      setIsNoteCreated = _useState22[1];
+
   var mainBodyIndex = devoBook.findIndex(function (devo) {
     return devo.id === (mainBodyDevo === null || mainBodyDevo === void 0 ? void 0 : mainBodyDevo.id);
   });
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     fetchNotes();
     return function () {
-      return clearErrors();
+      clearErrors();
+      handleSetDefaultState();
     };
   }, []);
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
@@ -3018,7 +3024,7 @@ var NotesForm = function NotesForm(_ref) {
       setBook(noteId.category);
       setDay(noteId.day);
       setBody(noteId.body);
-      setIsUpdate(true);
+      !isNoteCreated ? setIsUpdate(true) : setIsNoteCreated(false);
     }
   }, [noteId]);
 
@@ -3063,7 +3069,7 @@ var NotesForm = function NotesForm(_ref) {
   };
 
   var handleSetDefaultState = function handleSetDefaultState() {
-    setId('');
+    setId(false);
     setTitle('');
     setBook('');
     setDay('');
@@ -3082,19 +3088,18 @@ var NotesForm = function NotesForm(_ref) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              console.log('handleSubmit');
               e.preventDefault();
               setIsLoading(true);
               noteObject = {
                 id: id,
                 title: title,
-                book: book,
+                category: book,
                 day: day,
                 body: body
               };
 
               if (!(Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(title) || Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(body) || Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(book) || Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(day) || !Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["dayIsNumber"])(day))) {
-                _context.next = 15;
+                _context.next = 14;
                 break;
               }
 
@@ -3110,24 +3115,29 @@ var NotesForm = function NotesForm(_ref) {
               if (!Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["dayIsNumber"])(day) && !Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_5__["wordIsBlank"])(day)) errArray.push(ERRORS[4]); // Day is !number
 
               if (!(errArray.length > 0)) {
-                _context.next = 13;
+                _context.next = 12;
                 break;
               }
 
               return _context.abrupt("return", setUpdateErrors(errArray));
 
-            case 13:
-              _context.next = 20;
+            case 12:
+              _context.next = 18;
               break;
 
-            case 15:
-              id.length < 1 ? createNote(noteObject) : updateNote(noteObject);
-              handleSetDefaultState();
+            case 14:
+              if (!isUpdate) {
+                createNote(noteObject);
+                setIsNoteCreated(true);
+              } else {
+                updateNote(noteObject);
+              }
+
               setSuccess(true);
-              renderConfirmation();
+              handleSetSuccessTimeout();
               fetchNotes();
 
-            case 20:
+            case 18:
             case "end":
               return _context.stop();
           }
@@ -3140,9 +3150,10 @@ var NotesForm = function NotesForm(_ref) {
     };
   }();
 
-  var renderConfirmation = function renderConfirmation() {
+  var handleSetSuccessTimeout = function handleSetSuccessTimeout() {
     window.setTimeout(function () {
       setSuccess(false);
+      handleSetDefaultState();
     }, 3000);
   };
 
@@ -3168,7 +3179,7 @@ var NotesForm = function NotesForm(_ref) {
       onClick: function onClick(e) {
         return handleSubmit(e);
       }
-    }, isUpdate ? 'Update' : 'Create'), (isUpdate || isPrefilled) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    }, !isUpdate ? 'Create' : 'Update'), (!isUpdate && isPrefilled || isUpdate) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "notes-form-cancel-x",
       onClick: function onClick() {
         return handleSetDefaultState();
@@ -3200,71 +3211,73 @@ var NotesForm = function NotesForm(_ref) {
     return errObject;
   };
 
-  if (success && !isUpdate) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "success-message-div"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Note Created!"));
-  } else if (success && isUpdate) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "success-message-div"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Note Updated!"));
-  } else {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "notes-form-container"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
-      onSubmit: handleSubmit
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "notes-form"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "notes-form-book-day"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "columns"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "form-errors-notes"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Book "), " ", renderErrors().book), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-      type: "text",
-      className: "notes-form-input",
-      value: book,
-      onChange: function onChange(e) {
-        return setBook(e.target.value);
-      } // required
-
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "columns"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "form-errors-notes"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Day# "), renderErrors().day, renderErrors().number), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-      type: "text",
-      className: "notes-form-input",
-      value: day,
-      onChange: function onChange(e) {
-        return setDay(e.target.value);
-      } // required
-
-    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "notes-title-wrapper"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "form-errors-notes"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Title "), renderErrors().title), renderEmojis()), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-      type: "text",
-      className: "notes-form-input-title",
-      onChange: function onChange(e) {
-        return setTitle(e.target.value);
-      },
-      value: title // required
-
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "form-errors-notes"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Body "), renderErrors().body), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
-      className: "notes-form-textarea",
-      placeholder: 'Enter note here..',
-      onChange: function onChange(e) {
-        return setBody(e.target.value);
-      },
-      value: body // required
-
-    }), renderFormButton())), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null));
+  if (success) {
+    if (!isUpdate) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "success-message-div"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Note Created!"));
+    } else {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "success-message-div"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Note Updated!"));
+    }
   }
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "notes-form-container"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+    onSubmit: handleSubmit
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "notes-form"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "notes-form-book-day"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "columns"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-errors-notes"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Book "), " ", renderErrors().book), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "text",
+    className: "notes-form-input",
+    value: book,
+    onChange: function onChange(e) {
+      return setBook(e.target.value);
+    } // required
+
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "columns"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-errors-notes"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Day# "), renderErrors().day, renderErrors().number), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "text",
+    className: "notes-form-input",
+    value: day,
+    onChange: function onChange(e) {
+      return setDay(e.target.value);
+    } // required
+
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "notes-title-wrapper"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-errors-notes"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Title "), renderErrors().title), renderEmojis()), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "text",
+    className: "notes-form-input-title",
+    onChange: function onChange(e) {
+      return setTitle(e.target.value);
+    },
+    value: title // required
+
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-errors-notes"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Body "), renderErrors().body), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
+    className: "notes-form-textarea",
+    placeholder: 'Enter note here..',
+    onChange: function onChange(e) {
+      return setBody(e.target.value);
+    },
+    value: body // required
+
+  }), renderFormButton())), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null));
 };
 /******************************
  *       mapStateToProps      *

@@ -29,7 +29,7 @@ const EMOJI = {
  ******************************/
 
 const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote, updateNote, noteId }) => {
-	const [id, setId] = useState('');
+	const [id, setId] = useState(!!noteId.id);
 	const [title, setTitle] = useState('');
 	const [book, setBook] = useState('');
 	const [day, setDay] = useState('');
@@ -37,13 +37,17 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 	const [updateErrors, setUpdateErrors] = useState([]);
 	const [success, setSuccess] = useState(false);
 	const [isUpdate, setIsUpdate] = useState(false);
-	const [isLoading, setIsLoading] = useState(false)
+	const [isLoading, setIsLoading] = useState(false);
 	const [isPrefilled, setIsPrefilled] = useState(false);
+	const [isNoteCreated, setIsNoteCreated] = useState(false);
 	const mainBodyIndex = devoBook.findIndex((devo) => devo.id === mainBodyDevo?.id);
 
 	useEffect(() => {
 		fetchNotes();
-		return () => clearErrors();
+		return () => {
+			clearErrors();
+			handleSetDefaultState();
+		};
 	}, []);
 
 	useEffect(() => {
@@ -53,7 +57,7 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 			setBook(noteId.category);
 			setDay(noteId.day);
 			setBody(noteId.body);
-			setIsUpdate(true);
+			!isNoteCreated ? setIsUpdate(true) : setIsNoteCreated(false);
 		}
 	}, [noteId]);
 
@@ -89,12 +93,12 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 	};
 
 	const handleSetDefaultState = () => {
-		setId('');
+		setId(false);
 		setTitle('');
 		setBook('');
 		setDay('');
 		setBody('');
-		setUpdateErrors([])
+		setUpdateErrors([]);
 		setSuccess(false);
 		setIsUpdate(false);
 		setIsLoading(false);
@@ -102,10 +106,9 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 	};
 
 	const handleSubmit = async (e) => {
-		console.log('handleSubmit')
 		e.preventDefault();
 		setIsLoading(true);
-		const noteObject = { id, title, book, day, body };
+		const noteObject = { id, title, category: book, day, body };
 
 		if (wordIsBlank(title) || wordIsBlank(body) || wordIsBlank(book) || wordIsBlank(day) || !dayIsNumber(day)) {
 			let errArray = [];
@@ -116,17 +119,23 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 			if (!dayIsNumber(day) && !wordIsBlank(day)) errArray.push(ERRORS[4]); // Day is !number
 			if (errArray.length > 0) return setUpdateErrors(errArray);
 		} else {
-			id.length < 1 ? createNote(noteObject) : updateNote(noteObject);
-			handleSetDefaultState();
+			if (!isUpdate) {
+				createNote(noteObject)
+				setIsNoteCreated(true)
+			} else {
+				updateNote(noteObject);
+			}
+
 			setSuccess(true);
-			renderConfirmation();
+			handleSetSuccessTimeout();
 			fetchNotes();
 		}
 	};
 
-	const renderConfirmation = () => {
+	const handleSetSuccessTimeout = () => {
 		window.setTimeout(() => {
 			setSuccess(false);
+			handleSetDefaultState();
 		}, 3000);
 	};
 
@@ -135,7 +144,7 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 		setBook(mainBodyDevo?.book);
 		setTitle(mainBodyDevo?.title);
 		setDay(day);
-		setIsPrefilled(true)
+		setIsPrefilled(true);
 	};
 
 	const renderFormButton = () => {
@@ -147,9 +156,9 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 					</div>
 				)}
 				<button className='notes-form-submit-button' disabled={isLoading} onClick={(e) => handleSubmit(e)}>
-					{isUpdate ? 'Update' : 'Create'}
+					{!isUpdate ? 'Create' : 'Update'}
 				</button>
-				{(isUpdate || isPrefilled) && (
+				{((!isUpdate && isPrefilled) || isUpdate) && (
 					<div className='notes-form-cancel-x' onClick={() => handleSetDefaultState()}>
 						&#10005;
 					</div>
@@ -181,91 +190,92 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 		if (!wordIsBlank(book)) errObject.book = '';
 		if (!wordIsBlank(day)) errObject.day = '';
 		if (dayIsNumber(day)) errObject.number = '';
-		
+
 		return errObject;
 	};
 
-	if (success && !isUpdate) {
-		return (
-			<div className='success-message-div'>
-				<span>Note Created!</span>
-			</div>
-		);
-	} else if (success && isUpdate) {
-		return (
-			<div className='success-message-div'>
-				<span>Note Updated!</span>
-			</div>
-		);
-	} else {
-		return (
-			<div className='notes-form-container'>
-				<form onSubmit={handleSubmit}>
-					<div className='notes-form'>
-						{/* categories and day */}
-						<div className='notes-form-book-day'>
-							<div className='columns'>
-								<div className='form-errors-notes'>
-									<label>Book </label> {renderErrors().book}
-								</div>
-								<input
-									type='text'
-									className='notes-form-input'
-									value={book}
-									onChange={(e) => setBook(e.target.value)}
-									// required
-								/>
-							</div>
-							<div className='columns'>
-								<div className='form-errors-notes'>
-									<label>Day# </label>
-									{renderErrors().day}
-									{renderErrors().number}
-								</div>
-								<input
-									type='text'
-									className='notes-form-input'
-									value={day}
-									onChange={(e) => setDay(e.target.value)}
-									// required
-								/>
-							</div>
-						</div>
-						{/* title */}
-						<div className='notes-title-wrapper'>
-							<div className='form-errors-notes'>
-								<label>Title </label>
-								{renderErrors().title}
-							</div>
-							{renderEmojis()}
-						</div>
-						<input
-							type='text'
-							className='notes-form-input-title'
-							onChange={(e) => setTitle(e.target.value)}
-							value={title}
-							// required
-						/>
-						{/* body */}
-						<div className='form-errors-notes'>
-							<label>Body </label>
-							{renderErrors().body}
-						</div>
-						<textarea
-							className='notes-form-textarea'
-							placeholder={'Enter note here..'}
-							onChange={(e) => setBody(e.target.value)}
-							value={body}
-							// required
-						/>
-						{renderFormButton()}
-					</div>
-				</form>
-
-				<br />
-			</div>
-		);
+	if (success) {
+		if (!isUpdate) {
+			return (
+				<div className='success-message-div'>
+					<span>Note Created!</span>
+				</div>
+			);
+		} else {
+			return (
+				<div className='success-message-div'>
+					<span>Note Updated!</span>
+				</div>
+			);
+		}
 	}
+	return (
+		<div className='notes-form-container'>
+			<form onSubmit={handleSubmit}>
+				<div className='notes-form'>
+					{/* categories and day */}
+					<div className='notes-form-book-day'>
+						<div className='columns'>
+							<div className='form-errors-notes'>
+								<label>Book </label> {renderErrors().book}
+							</div>
+							<input
+								type='text'
+								className='notes-form-input'
+								value={book}
+								onChange={(e) => setBook(e.target.value)}
+								// required
+							/>
+						</div>
+						<div className='columns'>
+							<div className='form-errors-notes'>
+								<label>Day# </label>
+								{renderErrors().day}
+								{renderErrors().number}
+							</div>
+							<input
+								type='text'
+								className='notes-form-input'
+								value={day}
+								onChange={(e) => setDay(e.target.value)}
+								// required
+							/>
+						</div>
+					</div>
+					{/* title */}
+					<div className='notes-title-wrapper'>
+						<div className='form-errors-notes'>
+							<label>Title </label>
+							{renderErrors().title}
+						</div>
+						{renderEmojis()}
+					</div>
+					<input
+						type='text'
+						className='notes-form-input-title'
+						onChange={(e) => setTitle(e.target.value)}
+						value={title}
+						// required
+					/>
+					{/* body */}
+					<div className='form-errors-notes'>
+						<label>Body </label>
+						{renderErrors().body}
+					</div>
+					<textarea
+						className='notes-form-textarea'
+						placeholder={'Enter note here..'}
+						onChange={(e) => setBody(e.target.value)}
+						value={body}
+						// required
+					/>
+					{renderFormButton()}
+				</div>
+			</form>
+
+			<br />
+		</div>
+	);
 };
 
 /******************************
