@@ -3,7 +3,11 @@ import { connect } from 'react-redux';
 import { fetchNotes, updateNote, createNote } from '../../actions/note_actions';
 import { clearErrors } from '../../actions/session_actions';
 import { withRouter } from 'react-router-dom';
-import { wordIsBlank, sortDevoBook, dayIsNumber } from '../../helpers/helperFunctions';
+import {
+	wordIsBlank,
+	sortDevoBook,
+	dayIsNumber,
+} from '../../helpers/helperFunctions';
 
 /******************************
  *          CONSTANTS         *
@@ -25,10 +29,18 @@ const EMOJI = {
 };
 
 /******************************
- *     NotesForm Component    *
+ *     Notes Component    *
  ******************************/
 
-const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote, updateNote, noteId }) => {
+const Notes = ({
+	mainBodyDevo,
+	devoBook,
+	fetchNotes,
+	clearErrors,
+	createNote,
+	updateNote,
+	noteId,
+}) => {
 	const [id, setId] = useState(!!noteId.id);
 	const [title, setTitle] = useState('');
 	const [book, setBook] = useState('');
@@ -40,7 +52,9 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 	const [isLoading, setIsLoading] = useState(false);
 	const [isPrefilled, setIsPrefilled] = useState(false);
 	const [isNoteCreated, setIsNoteCreated] = useState(false);
-	const mainBodyIndex = devoBook.findIndex((devo) => devo.id === mainBodyDevo?.id);
+	const mainBodyIndex = devoBook.findIndex(
+		(devo) => devo.id === mainBodyDevo?.id
+	);
 
 	useEffect(() => {
 		fetchNotes();
@@ -66,13 +80,14 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 		if (title.includes(emoji)) {
 			newTitle = title.replace(emoji, '');
 		} else {
-			newTitle = mainBodyDevo?.title === title ? title + ' ' + emoji : title + emoji;
+			newTitle =
+				mainBodyDevo?.title === title ? title + ' ' + emoji : title + emoji;
 		}
 		return setTitle(newTitle);
 	};
 
 	const renderEmojis = () => {
-		if (title.includes(mainBodyDevo?.title)) {
+		if (title && title.includes(mainBodyDevo?.title)) {
 			return (
 				<div className='notes-title-emojis'>
 					<div id='notes-emoji' onClick={() => handleEmoji(EMOJI.star)}>
@@ -110,7 +125,13 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 		setIsLoading(true);
 		const noteObject = { id, title, category: book, day, body };
 
-		if (wordIsBlank(title) || wordIsBlank(body) || wordIsBlank(book) || wordIsBlank(day) || !dayIsNumber(day)) {
+		if (
+			wordIsBlank(title) ||
+			wordIsBlank(body) ||
+			wordIsBlank(book) ||
+			wordIsBlank(day) ||
+			!dayIsNumber(day)
+		) {
 			let errArray = [];
 			if (wordIsBlank(title)) errArray.push(ERRORS[0]); // Title is blank
 			if (wordIsBlank(body)) errArray.push(ERRORS[1]); // Body is blank
@@ -120,8 +141,8 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 			if (errArray.length > 0) return setUpdateErrors(errArray);
 		} else {
 			if (!isUpdate) {
-				createNote(noteObject)
-				setIsNoteCreated(true)
+				createNote(noteObject);
+				setIsNoteCreated(true);
 			} else {
 				updateNote(noteObject);
 			}
@@ -150,16 +171,23 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 	const renderFormButton = () => {
 		return (
 			<div className='button-container'>
-				{!isUpdate && !isPrefilled && (
+				{mainBodyDevo && !isUpdate && !isPrefilled && (
 					<div className='notes-form-prefill' onClick={() => prefillNoteForm()}>
 						&#9776;
 					</div>
 				)}
-				<button className='notes-form-submit-button' disabled={isLoading} onClick={(e) => handleSubmit(e)}>
+				<button
+					className='notes-form-submit-button'
+					disabled={isLoading}
+					onClick={(e) => handleSubmit(e)}
+				>
 					{!isUpdate ? 'Create' : 'Update'}
 				</button>
 				{((!isUpdate && isPrefilled) || isUpdate) && (
-					<div className='notes-form-cancel-x' onClick={() => handleSetDefaultState()}>
+					<div
+						className='notes-form-cancel-x'
+						onClick={() => handleSetDefaultState()}
+					>
 						&#10005;
 					</div>
 				)}
@@ -195,19 +223,11 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 	};
 
 	if (success) {
-		if (!isUpdate) {
-			return (
-				<div className='success-message-div'>
-					<span>Note Created!</span>
-				</div>
-			);
-		} else {
-			return (
-				<div className='success-message-div'>
-					<span>Note Updated!</span>
-				</div>
-			);
-		}
+		return (
+			<div className='success-message-div'>
+				<span>{!isUpdate ? 'Note Created!' : 'Note Updated!'}</span>
+			</div>
+		);
 	}
 	return (
 		<div className='notes-form-container'>
@@ -278,11 +298,7 @@ const NotesForm = ({ mainBodyDevo, devoBook, fetchNotes, clearErrors, createNote
 	);
 };
 
-/******************************
- *       mapStateToProps      *
- ******************************/
-
-const mapStateToProps = ({ session, users, errors, notes, devos }) => {
+const mapState = ({ session, users, errors, notes, devos }) => {
 	const noteId = notes.noteId ? notes.noteId : {};
 	const notesArray = notes.noteId ? [] : Object.values(notes);
 	const noteErrors = notes.noteErrors ? notes.noteErrors : [];
@@ -299,15 +315,11 @@ const mapStateToProps = ({ session, users, errors, notes, devos }) => {
 	};
 };
 
-/******************************
- *     mapDispatchToProps     *
- ******************************/
-
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatch = (dispatch) => ({
 	fetchNotes: () => dispatch(fetchNotes()),
 	updateNote: (note) => dispatch(updateNote(note)),
 	createNote: (note) => dispatch(createNote(note)),
 	clearErrors: () => dispatch(clearErrors()),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NotesForm));
+export default withRouter(connect(mapState, mapDispatch)(Notes));

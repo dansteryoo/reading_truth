@@ -1,16 +1,15 @@
 import React, { useState, useEffect, createRef } from 'react';
-import SideNavItem from './sidenav_item';
-import { allBookTitles, allBookTitlesFormat } from '../../helpers/bookTitles';
+import SideNavbarItem from './SideNavbarItem';
 import { setPayload } from '../../helpers/helperFunctions';
 import { connect } from 'react-redux';
 import { fetchDevo, fetchDevoBook } from '../../actions/devo_actions';
 import { sortDevoBook } from '../../helpers/helperFunctions';
 
 /******************************
- *      SideNav Component     *
+ *      SideNavbar Component     *
  ******************************/
 
-const SideNav = ({ currentUser, fetchDevoBook, fetchDevo, devoBook }) => {
+const SideNavbar = ({ currentUser, fetchDevoBook, fetchDevo, devoBook }) => {
 	const [book, setBook] = useState('');
 	const myRef = createRef();
 	const currentUserBookmark = currentUser.bookmark;
@@ -20,7 +19,10 @@ const SideNav = ({ currentUser, fetchDevoBook, fetchDevo, devoBook }) => {
 	}, []);
 
 	useEffect(() => {
-		updateBookTitle();
+		if (devoBook.length > 0) {
+			setBook(devoBook[0].book);
+			devoBook[0].book !== book && myRef.current.scrollTo(0, 0);
+		}
 	}, [devoBook]);
 
 	/******************************
@@ -28,7 +30,9 @@ const SideNav = ({ currentUser, fetchDevoBook, fetchDevo, devoBook }) => {
 	 ******************************/
 
 	const bookmarkIsBlank = (bookmark) => {
-		return bookmark == (undefined || null) || Object.values(bookmark).length < 1;
+		return (
+			bookmark == (undefined || null) || Object.values(bookmark).length < 1
+		);
 	};
 
 	/******************************
@@ -50,39 +54,23 @@ const SideNav = ({ currentUser, fetchDevoBook, fetchDevo, devoBook }) => {
 	};
 
 	/******************************
-	 *       updateBookTitle      *
-	 ******************************/
-
-	const updateBookTitle = () => {
-		if (devoBook.length > 0) {
-			setBook(devoBook[0].book);
-			devoBook[0].book !== book && myRef.current.scrollTo(0, 0);
-		}
-	};
-
-	/******************************
-	 *       renderBookTitle      *
-	 ******************************/
-
-	const renderBookTitle = () => {
-		const devoBookTitle = allBookTitlesFormat[book];
-		const devoBookTitleRender = allBookTitles[allBookTitles.indexOf(book)];
-		return devoBookTitleRender || devoBookTitle;
-	};
-
-	/******************************
 	 *           render           *
 	 ******************************/
 
 	return (
 		<div className='left-container'>
 			<div className='sidenav-title'>
-				<span>{renderBookTitle()}</span>
+				<span>{book}</span>
 			</div>
 			<div className='sidenav-container' ref={myRef}>
 				<ul className='sidenav-ul'>
 					{devoBook.map((dailyDevo, i) => (
-						<SideNavItem days={i} dailyDevo={dailyDevo} fetchDevo={fetchDevo} key={dailyDevo.id} />
+						<SideNavbarItem
+							days={i}
+							dailyDevo={dailyDevo}
+							fetchDevo={fetchDevo}
+							key={dailyDevo.id}
+						/>
 					))}
 				</ul>
 			</div>
@@ -91,10 +79,10 @@ const SideNav = ({ currentUser, fetchDevoBook, fetchDevo, devoBook }) => {
 };
 
 /******************************
- *      mapStateToProps       *
+ *      mapState       *
  ******************************/
 
-const mapStateToProps = ({ session, users, devos }) => {
+const mapState = ({ session, users, devos }) => {
 	const devoBook = devos.devoBook ? Object.values(devos.devoBook) : [];
 
 	return {
@@ -103,13 +91,9 @@ const mapStateToProps = ({ session, users, devos }) => {
 	};
 };
 
-/******************************
- *     mapDispatchToProps     *
- ******************************/
-
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatch = (dispatch) => ({
 	fetchDevo: (devoId) => dispatch(fetchDevo(devoId)),
 	fetchDevoBook: (book) => dispatch(fetchDevoBook(book)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SideNav);
+export default connect(mapState, mapDispatch)(SideNavbar);

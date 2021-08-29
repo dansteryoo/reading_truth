@@ -1,5 +1,15 @@
 import React from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { closeModal, openModal } from '../../actions/modal_actions';
+import { fetchDevo } from '../../actions/devo_actions';
+import { clearErrors } from '../../actions/session_actions';
+import {
+	createBookmark,
+	fetchBookmark,
+	deleteBookmark,
+} from '../../actions/bookmark_actions';
+import { sortDevoBook } from '../../helpers/helperFunctions';
 import { regBibleTitles, maxMcLeanBooks } from '../../helpers/bookTitles';
 
 class MainBody extends React.Component {
@@ -182,10 +192,18 @@ class MainBody extends React.Component {
 			//---------- PREVENTS DUPS in esvPassage ----------//
 			this.setState({ esvPassage: [] });
 			this.ESVpassageGetter(passages);
-
+			const devoImage =
+				gender === 'SHE'
+					? img === ''
+						? 'https://res.cloudinary.com/dmwoxjusp/image/upload/v1630169994/shereads-logo_s9lsvp.jpg'
+						: img
+					: img === ''
+					? 'https://res.cloudinary.com/dmwoxjusp/image/upload/v1630169994/hereads-logo_r2fecj.jpg'
+					: img; 
+	
 			this.setState({
 				id,
-				img,
+				img: devoImage,
 				passages,
 				summary,
 				title,
@@ -212,12 +230,11 @@ class MainBody extends React.Component {
 
 		//---------- CATCH undefined ESV API returns ----------//
 		let newEsvData = esvSortMatch.filter((ele, i) => {
-			if (ele.text === undefined) {
-				alert(`ESV PASSAGE ERROR IN: 
+			if (!ele.text) {
+				return console.log(`ESV PASSAGE ERROR IN: 
                     index(${i}), 
                     passage(${JSON.stringify(ele.passage)}), 
                     text(${JSON.stringify(ele.text)})`);
-				return;
 			}
 			return ele;
 		});
@@ -402,4 +419,26 @@ class MainBody extends React.Component {
 	}
 }
 
-export default MainBody;
+const mapState = ({ session, users, devos, bookmark, errors }) => {
+	const devoBook = devos.devoBook ? Object.values(devos.devoBook) : [];
+
+	return {
+		currentUser: users[session.id],
+		mainBodyDevo: devos.mainBodyDevo ?? null,
+		errors,
+		devoBook: sortDevoBook(devoBook),
+		bookmark,
+	};
+};
+
+const mapDispatch = (dispatch) => ({
+	closeModal: () => dispatch(closeModal()),
+	openModal: (formType) => dispatch(openModal(formType)),
+	clearErrors: () => dispatch(clearErrors()),
+	fetchDevo: (devoId) => dispatch(fetchDevo(devoId)),
+	createBookmark: (bookmark) => dispatch(createBookmark(bookmark)),
+	fetchBookmark: () => dispatch(fetchBookmark()),
+	deleteBookmark: (bookmarkId) => dispatch(deleteBookmark(bookmarkId)),
+});
+
+export default connect(mapState, mapDispatch)(MainBody);
