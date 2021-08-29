@@ -1,10 +1,10 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
 import { AuthRoute, ProtectedRoute } from '../util/route_util';
-import Modal from './splash/Modal1';
-import Splash from './splash/Splash1';
+import Modal from './splash/Modal';
+import Splash from './splash/Splash';
 import SignupForm from './forms/Signup';
-import HomePage from './home/HomePage1';
+import HomePage from './home/HomePage';
 import WelcomeMessage from './home/WelcomeMessage';
 
 const App = () => {
