@@ -1,10 +1,10 @@
 import React from "react";
 
 /******************************
- *    SideNavItem Component   *
+ *    SideNavbarItem Component   *
  ******************************/
 
-const SideNavItem = ({ dailyDevo, days, fetchDevo }) => {
+const SideNavbarItem = ({ dailyDevo, days, fetchDevo }) => {
     return (
         <li className="daily-devo-li" onClick={() => fetchDevo(dailyDevo.id)}>
             <div className="daily-devo-days">
@@ -19,4 +19,4 @@ const SideNavItem = ({ dailyDevo, days, fetchDevo }) => {
     );
 };
 
-export default SideNavItem;
+export default SideNavbarItem;

@@ -1,5 +1,8 @@
 export const searchRegexMatch = (search) => {
-	const input = Array.from(search).reduce((a, v, i) => `${a}[^${search.substring(i)}]*?${v}`, '');
+	const input = Array.from(search).reduce(
+		(a, v, i) => `${a}[^${search.substring(i)}]*?${v}`,
+		''
+	);
 	return new RegExp(input);
 };
 
@@ -24,7 +27,9 @@ export const setPayload = (data) => {
 
 export const sortTitles = (data, bibleBooks) => {
 	const lowerCaseArr = bibleBooks.map((ele) => ele.toLowerCase());
-	return data.sort((a, b) => lowerCaseArr.indexOf(a.book) - lowerCaseArr.indexOf(b.book)).map((ele) => ele);
+	return data
+		.sort((a, b) => lowerCaseArr.indexOf(a.book) - lowerCaseArr.indexOf(b.book))
+		.map((ele) => ele);
 };
 
 export const sortAlphabetically = (data) => {
@@ -56,7 +61,12 @@ export const sortDevoBook = (devoBook) => {
 		Philemon: true,
 	};
 
-	if (gender === 'HE' || (gender === 'HE' && reverseCheck[book]) || (gender === 'SHE' && book === 'Judges') || book === 'Job') {
+	if (
+		gender === 'HE' ||
+		(gender === 'HE' && reverseCheck[book]) ||
+		(gender === 'SHE' && book === 'Judges') ||
+		book === 'Job'
+	) {
 		return devoBook.reverse();
 	}
 	return devoBook;
@@ -78,3 +88,21 @@ export const dayIsNumber = (day) => {
 	return true;
 };
 
+export const createTitlePayload = (arrayOfBooks, titleObject) => {
+	if (!Array.isArray(arrayOfBooks) || arrayOfBooks.length < 1)
+		return arrayOfBooks;
+	const lowercaseArray = arrayOfBooks.map((ele) => ele.toLowerCase());
+	const bookTitle = arrayOfBooks[lowercaseArray.indexOf(titleObject.book)];
+	return {
+		gender: titleObject.gender,
+		book: bookTitle,
+	};
+};
+
+export const reformatMapToLowercase = (data) => {
+	let hash = {};
+	for (let key in data) {
+		hash[key.toLowerCase()] = data[key];
+	}
+	return hash;
+};

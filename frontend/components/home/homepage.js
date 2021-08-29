@@ -1,18 +1,23 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import SideNav from '../sidenav/sidenav';
-import Navbar from '../navbar/navbar';
-import NotesForm from '../notes/notesForm';
+import SideNavbar from './SideNavbar';
+import TopNavbar from './TopNavbar';
+import NotesForm from '../forms/Notes';
 import { connect } from 'react-redux';
 import { clearDevoState } from '../../actions/devo_actions';
 import { clearErrors } from '../../actions/session_actions';
 import { clearNoteState } from '../../actions/note_actions';
-import MainBodyContainer from './main_body_container';
+import MainBody from './MainBody';
 
 /******************************
- *     Homepage Component     *
+ *     HomePage Component     *
  ******************************/
 
-const Homepage = ({ currentUser, clearErrors, clearDevoState, clearNoteState }) => {
+const HomePage = ({
+	currentUser,
+	clearErrors,
+	clearDevoState,
+	clearNoteState,
+}) => {
 	const [leftOpen, setLeftOpen] = useState(true);
 	const [rightOpen, setRightOpen] = useState(true);
 	const currentUserId = JSON.stringify(currentUser.id);
@@ -28,7 +33,6 @@ const Homepage = ({ currentUser, clearErrors, clearDevoState, clearNoteState }) 
 		};
 	}, []);
 
-
 	const leftSideRender = () => {
 		return (
 			<div className={`sidebar ${leftSide}`}>
@@ -39,7 +43,7 @@ const Homepage = ({ currentUser, clearErrors, clearDevoState, clearNoteState }) 
 				</div>
 				<div className='left-content'>
 					{/* ---------- SIDE NAV START ---------- */}
-					<SideNav />
+					<SideNavbar />
 					{/* ---------- SIDE NAV END  ---------- */}
 				</div>
 			</div>
@@ -55,9 +59,7 @@ const Homepage = ({ currentUser, clearErrors, clearDevoState, clearNoteState }) 
 					</h3>
 				</div>
 				<div className='content'>
-					{/* ---------- NOTE FORM START ---------- */}
 					<NotesForm />
-					{/* ---------- NOTE FORM END ---------- */}
 				</div>
 			</div>
 		);
@@ -69,9 +71,7 @@ const Homepage = ({ currentUser, clearErrors, clearDevoState, clearNoteState }) 
 
 	return (
 		<Fragment>
-			{/* ---------- TOP NAV START ---------- */}
-			<Navbar />
-			{/* ---------- TOP NAV END  ---------- */}
+			<TopNavbar />
 			<div id='layout'>
 				<div id='left' className={leftSide}>
 					<div className='icon' onClick={() => setLeftOpen(!leftOpen)}>
@@ -93,9 +93,7 @@ const Homepage = ({ currentUser, clearErrors, clearDevoState, clearNoteState }) 
 						</h3>
 					</div>
 					<div className='content'>
-						{/* ---------- MAIN BODY START ---------- */}
-						<MainBodyContainer />
-						{/* ---------- MAIN BODY END ---------- */}
+						<MainBody />
 					</div>
 				</div>
 				<div id='right' className={rightSide}>
@@ -109,24 +107,16 @@ const Homepage = ({ currentUser, clearErrors, clearDevoState, clearNoteState }) 
 	);
 };
 
-/******************************
- *       mapStateToProps      *
- ******************************/
-
-const mapStateToProps = ({ session, users }) => {
+const mapState = ({ session, users }) => {
 	return {
 		currentUser: users[session.id],
 	};
 };
 
-/******************************
- *     mapDispatchToProps     *
- ******************************/
-
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatch = (dispatch) => ({
 	clearErrors: () => dispatch(clearErrors()),
 	clearDevoState: () => dispatch(clearDevoState()),
 	clearNoteState: () => dispatch(clearNoteState()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Homepage);
+export default connect(mapState, mapDispatch)(HomePage);
