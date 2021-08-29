@@ -1,11 +1,11 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
 import { AuthRoute, ProtectedRoute } from '../util/route_util';
-import Modal from './splash/Modal';
-import Splash from './splash/Splash';
-import SignupForm from './forms/Signup';
-import HomePage from './home/HomePage';
-import WelcomeMessage from './home/WelcomeMessage';
+import Modal from '../components/splash/Modal';
+import Splash from '../components/splash/Splash';
+import SignupForm from '../components/forms/Signup';
+import HomePage from '../components/home/HomePage';
+import WelcomeMessage from '../components/home/WelcomeMessage';
 
 const App = () => {
 	return (
