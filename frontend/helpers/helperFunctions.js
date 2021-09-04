@@ -76,7 +76,7 @@ export const sortDevoBook = (devoBook) => {
 	return devoBook;
 };
 
-export const isValidNumber = (num) => {
+export const isNumber = (num) => {
 	return typeof num === 'number';
 };
 
