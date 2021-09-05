@@ -382,9 +382,13 @@ const MainBody = ({
 			currentBookTitleIndex === ALL_BOOK_TITLES.length - 1
 				? ALL_BOOK_TITLES[0]
 				: ALL_BOOK_TITLES[currentBookTitleIndex + 1];
-
+		
 		const fetchPayload = (bookTitle) => {
 			const fetchBookPayload = createTitlePayload(ALL_BOOK_TITLES, {
+				gender: gender.toUpperCase(),
+				book: bookTitle.toLowerCase(),
+			});
+			console.log({
 				gender: gender.toUpperCase(),
 				book: bookTitle.toLowerCase(),
 			});
