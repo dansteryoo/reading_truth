@@ -2006,6 +2006,10 @@ var MainBody = function MainBody(_ref) {
         gender: gender.toUpperCase(),
         book: bookTitle.toLowerCase()
       });
+      console.log({
+        gender: gender.toUpperCase(),
+        book: bookTitle.toLowerCase()
+      });
       return fetchDevoBook(Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_8__["setPayload"])(fetchBookPayload));
     };
 
@@ -4151,6 +4155,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "dayIsNumber", function() { return dayIsNumber; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createTitlePayload", function() { return createTitlePayload; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "reformatMapToLowercase", function() { return reformatMapToLowercase; });
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 var searchRegexMatch = function searchRegexMatch(search) {
   var input = Array.from(search).reduce(function (a, v, i) {
     return "".concat(a, "[^").concat(search.substring(i), "]*?").concat(v);
@@ -4208,25 +4224,17 @@ var sortDevoBook = function sortDevoBook(devoBook) {
   var _devoBook$ = devoBook[0],
       gender = _devoBook$.gender,
       book = _devoBook$.book;
-  var reverseCheck = {
-    Exodus: true,
-    Leviticus: true,
-    Numbers: true,
-    Deuteronomy: true,
-    '1 & 2 Chronicles': true,
-    Ezra: true,
-    Isaiah: true,
-    Jeremiah: true,
-    Lamentations: true,
-    Ezekiel: true,
-    Philemon: true
+  var isNotReversed = {
+    Leviticus: true
   };
 
-  if (gender === 'HE' || gender === 'HE' && reverseCheck[book] || gender === 'SHE' && book === 'Judges' || book === 'Job') {
-    return devoBook.reverse();
-  }
+  if (gender === 'HE' && !isNotReversed[book] || gender === 'SHE' && book === 'Judges' || book === 'Job') {
+    var reversedDevoBooks = _toConsumableArray(devoBook).reverse();
 
-  return devoBook;
+    return reversedDevoBooks;
+  } else {
+    return devoBook;
+  }
 };
 var isNumber = function isNumber(num) {
   return typeof num === 'number';

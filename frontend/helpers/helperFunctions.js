@@ -51,29 +51,20 @@ export const capitalizeFirstLetter = (string) => {
 export const sortDevoBook = (devoBook) => {
 	if (devoBook.length < 1) return devoBook;
 	const { gender, book } = devoBook[0];
-	const reverseCheck = {
-		Exodus: true,
+	const isNotReversed = {
 		Leviticus: true,
-		Numbers: true,
-		Deuteronomy: true,
-		'1 & 2 Chronicles': true,
-		Ezra: true,
-		Isaiah: true,
-		Jeremiah: true,
-		Lamentations: true,
-		Ezekiel: true,
-		Philemon: true,
 	};
 
 	if (
-		gender === 'HE' ||
-		(gender === 'HE' && reverseCheck[book]) ||
+		(gender === 'HE' && !isNotReversed[book]) ||
 		(gender === 'SHE' && book === 'Judges') ||
 		book === 'Job'
 	) {
-		return devoBook.reverse();
+		const reversedDevoBooks = [...devoBook].reverse();
+		return reversedDevoBooks;
+	} else {
+		return devoBook;
 	}
-	return devoBook;
 };
 
 export const isNumber = (num) => {
