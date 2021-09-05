@@ -23,6 +23,12 @@ import {
 	NTbooks, 
 } from '../../helpers/bookTitles';
 
+const ALL_BOOK_TITLES = [...OTbooks, ...NTbooks];
+const BOOK_TITLE_REF = {
+	prev: null,
+	next: null,
+}
+
 const splitPassages = (passages) => {
 	if (passages.length > 0) {
 		return passages.split(', ').map((ele) => ele.trim());
@@ -46,7 +52,8 @@ const MainBody = ({
 	deleteBookmark,
 	devoBook,
 }) => {
-	const isEmptyMainBody = mainBodyDevo === null;
+	const mainBodyIsNull = mainBodyDevo === null;
+	const devoBookIsEmpty = devoBook.length < 1;
 	const [bookmarkId, setBookmarkId] = useState('');
 	const [id, setId] = useState('');
 	const [gender, setGender] = useState('');
@@ -68,7 +75,7 @@ const MainBody = ({
 		const currentPage = handleLocalStorage('getCurrentPage');
 		if (currentPage) {
 			return fetchDevo(currentPage.id).then(() => {
-				setRenderDay(currentPage.render_day);
+				setRenderDay(currentPage.renderDay);
 				setBookmarkId(currentPage.bookmarkId);
 				setIsBookmarked(true);
 			});
@@ -85,12 +92,30 @@ const MainBody = ({
 	 *         useEffect          *
 	 ******************************/
 
+	// render mainBody from different devoBookTitle
+	useEffect(() => {
+		if (!devoBookIsEmpty && devoBook[0].book !== book) {
+			setId(null);
+			const currentBookTitle = devoBook[0].book;
+
+			if (currentBookTitle === BOOK_TITLE_REF.prev) {
+				fetchDevo(devoBook[devoBook.length - 1].id);
+				BOOK_TITLE_REF.prev = null;
+			}
+			if (currentBookTitle === BOOK_TITLE_REF.next) {
+				fetchDevo(devoBook[0].id);
+				BOOK_TITLE_REF.next = null;
+			}
+		}
+	}, [devoBook]);
+
+	// render mainBody from different devo of same devoBookTitle
 	useEffect(() => {
 		if (mainBodyChanged) setMainBodyChanged(false);
 		const { currentDay } = findMainBodyIndex();
-		if (currentDay !== renderDay) setRenderDay(currentDay);
+		if (currentDay && currentDay !== renderDay) setRenderDay(currentDay);
 
-		if (mainBodyDevo?.id && id !== mainBodyDevo?.id) {
+		if (mainBodyDevo?.id && id !== mainBodyDevo.id) {
 			handleGetEsvPassages(mainBodyDevo.passages);
 			setId(mainBodyDevo.id);
 			setPassage(mainBodyDevo.passages);
@@ -112,6 +137,7 @@ const MainBody = ({
 		}
 	}, [mainBodyDevo]);
 
+	// render bookmarks
 	useEffect(() => {
 		const hasNoBookmark = Object.values(bookmark).length < 1;
 
@@ -197,11 +223,18 @@ const MainBody = ({
 	 ******************************/
 
 	const findMainBodyIndex = () => {
-		const currentMainBodyDevoIndex =
-			mainBodyDevo && devoBook.findIndex((devo) => devo.id === mainBodyDevo.id);
+		if (mainBodyDevo) {
+			const currentMainBodyDevoIndex = devoBook.findIndex(
+				(devo) => devo.id === mainBodyDevo?.id
+			);
+			return {
+				currentMainBodyDevoIndex,
+				currentDay: currentMainBodyDevoIndex + 1,
+			};
+		}
 		return {
-			currentMainBodyDevoIndex,
-			currentDay: currentMainBodyDevoIndex + 1,
+			currentMainBodyDevoIndex: null,
+			currentDay: null,
 		};
 	};
 
@@ -338,45 +371,40 @@ const MainBody = ({
 
 	const toggleMainBody = (type) => {
 		const { currentMainBodyDevoIndex } = findMainBodyIndex();
-		const allBookTitles = [...OTbooks, ...NTbooks];
-		console.log(book)
-		const currentBookTitleIndex = allBookTitles.indexOf(book);
+		const currentBookTitleIndex = ALL_BOOK_TITLES.indexOf(book);
+
 		const previousBookTitle =
-			currentBookTitleIndex < 1
-				? allBookTitles[allBookTitles.length - 1]
-				: allBookTitles[currentBookTitleIndex - 1];
+			currentBookTitleIndex === 0
+				? ALL_BOOK_TITLES[ALL_BOOK_TITLES.length - 1]
+				: ALL_BOOK_TITLES[currentBookTitleIndex - 1];
+
 		const nextBookTitle =
-			currentBookTitleIndex > allBookTitles.length
-				? allBookTitles[0]
-				: allBookTitles[currentBookTitleIndex + 1];
-		console.log({
-			devoBook
-		});
-		const title = { gender: gender.toUpperCase() };
+			currentBookTitleIndex === ALL_BOOK_TITLES.length - 1
+				? ALL_BOOK_TITLES[0]
+				: ALL_BOOK_TITLES[currentBookTitleIndex + 1];
+
+		const fetchPayload = (bookTitle) => {
+			const fetchBookPayload = createTitlePayload(ALL_BOOK_TITLES, {
+				gender: gender.toUpperCase(),
+				book: bookTitle.toLowerCase(),
+			});
+			return fetchDevoBook(setPayload(fetchBookPayload));
+		};
 
 		switch (type) {
 			case 'previous':
-				if (currentMainBodyDevoIndex < 1) {
-					const fetchBookPayload = createTitlePayload(allBookTitles, {
-						...title,
-						book: previousBookTitle.toLowerCase(),
-					});
-					const devoPayload = setPayload(fetchBookPayload);
-					console.log({ devoPayload });
-					fetchDevoBook(devoPayload)
+				if (currentMainBodyDevoIndex === 0) {
+					BOOK_TITLE_REF.prev = previousBookTitle;
+					fetchPayload(previousBookTitle);
 				}
-				return fetchDevo(devoBook[currentMainBodyDevoIndex - 1].id);
+				return fetchDevo(devoBook[currentMainBodyDevoIndex - 1]?.id);
 
 			case 'next':
-				if (currentMainBodyDevoIndex > devoBook.length) {
-					const fetchBookPayload = createTitlePayload(allBookTitles, {
-						...title,
-						book: nextBookTitle.toLowerCase(),
-					});
-					const devoPayload = setPayload(fetchBookPayload);
-					fetchDevoBook(devoPayload);
+				if (currentMainBodyDevoIndex === devoBook.length - 1) {
+					BOOK_TITLE_REF.next = nextBookTitle;
+					fetchPayload(nextBookTitle);
 				}
-				return fetchDevo(devoBook[currentMainBodyDevoIndex + 1].id);
+				return fetchDevo(devoBook[currentMainBodyDevoIndex + 1]?.id);
 
 			default:
 				return;
@@ -433,7 +461,12 @@ const MainBody = ({
 	 *          render            *
 	 ******************************/
 
-	if (isEmptyMainBody && !handleLocalStorage('getCurrentPage')) {
+	if (
+		(mainBodyIsNull &&
+			!handleLocalStorage('getCurrentPage') &&
+			!devoBookIsEmpty) ||
+		!id
+	) {
 		return <></>;
 	}
 	if (isBookmarked && isNumber(bookmarkId)) {
@@ -501,7 +534,6 @@ const MainBody = ({
 
 const mapState = ({ session, users, devos, bookmark, errors }) => {
 	const devoBook = devos.devoBook ? Object.values(devos.devoBook) : [];
-
 	return {
 		currentUser: users[session.id],
 		mainBodyDevo: devos.mainBodyDevo ?? null,

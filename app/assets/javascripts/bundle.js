@@ -1584,20 +1584,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_bookmark_actions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../actions/bookmark_actions */ "./frontend/actions/bookmark_actions.js");
 /* harmony import */ var _helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../helpers/helperFunctions */ "./frontend/helpers/helperFunctions.js");
 /* harmony import */ var _helpers_bookTitles__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../helpers/bookTitles */ "./frontend/helpers/bookTitles.js");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -1606,14 +1592,21 @@ function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArra
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 
 
@@ -1624,6 +1617,12 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+var ALL_BOOK_TITLES = [].concat(_toConsumableArray(_helpers_bookTitles__WEBPACK_IMPORTED_MODULE_9__["OTbooks"]), _toConsumableArray(_helpers_bookTitles__WEBPACK_IMPORTED_MODULE_9__["NTbooks"]));
+var BOOK_TITLE_REF = {
+  prev: null,
+  next: null
+};
 
 var splitPassages = function splitPassages(passages) {
   if (passages.length > 0) {
@@ -1650,7 +1649,8 @@ var MainBody = function MainBody(_ref) {
       createBookmark = _ref.createBookmark,
       deleteBookmark = _ref.deleteBookmark,
       devoBook = _ref.devoBook;
-  var isEmptyMainBody = mainBodyDevo === null;
+  var mainBodyIsNull = mainBodyDevo === null;
+  var devoBookIsEmpty = devoBook.length < 1;
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
       _useState2 = _slicedToArray(_useState, 2),
@@ -1721,7 +1721,7 @@ var MainBody = function MainBody(_ref) {
 
     if (currentPage) {
       return fetchDevo(currentPage.id).then(function () {
-        setRenderDay(currentPage.render_day);
+        setRenderDay(currentPage.renderDay);
         setBookmarkId(currentPage.bookmarkId);
         setIsBookmarked(true);
       });
@@ -1736,6 +1736,24 @@ var MainBody = function MainBody(_ref) {
   /******************************
    *         useEffect          *
    ******************************/
+  // render mainBody from different devoBookTitle
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    if (!devoBookIsEmpty && devoBook[0].book !== book) {
+      setId(null);
+      var currentBookTitle = devoBook[0].book;
+
+      if (currentBookTitle === BOOK_TITLE_REF.prev) {
+        fetchDevo(devoBook[devoBook.length - 1].id);
+        BOOK_TITLE_REF.prev = null;
+      }
+
+      if (currentBookTitle === BOOK_TITLE_REF.next) {
+        fetchDevo(devoBook[0].id);
+        BOOK_TITLE_REF.next = null;
+      }
+    }
+  }, [devoBook]); // render mainBody from different devo of same devoBookTitle
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     if (mainBodyChanged) setMainBodyChanged(false);
@@ -1743,9 +1761,9 @@ var MainBody = function MainBody(_ref) {
     var _findMainBodyIndex = findMainBodyIndex(),
         currentDay = _findMainBodyIndex.currentDay;
 
-    if (currentDay !== renderDay) setRenderDay(currentDay);
+    if (currentDay && currentDay !== renderDay) setRenderDay(currentDay);
 
-    if (mainBodyDevo !== null && mainBodyDevo !== void 0 && mainBodyDevo.id && id !== (mainBodyDevo === null || mainBodyDevo === void 0 ? void 0 : mainBodyDevo.id)) {
+    if (mainBodyDevo !== null && mainBodyDevo !== void 0 && mainBodyDevo.id && id !== mainBodyDevo.id) {
       handleGetEsvPassages(mainBodyDevo.passages);
       setId(mainBodyDevo.id);
       setPassage(mainBodyDevo.passages);
@@ -1757,7 +1775,8 @@ var MainBody = function MainBody(_ref) {
       setIsBookmarked(false);
       setImg(gender === 'SHE' ? img === '' ? 'https://res.cloudinary.com/dmwoxjusp/image/upload/v1630169994/shereads-logo_s9lsvp.jpg' : img : img === '' ? 'https://res.cloudinary.com/dmwoxjusp/image/upload/v1630169994/hereads-logo_r2fecj.jpg' : img);
     }
-  }, [mainBodyDevo]);
+  }, [mainBodyDevo]); // render bookmarks
+
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     var hasNoBookmark = Object.values(bookmark).length < 1;
 
@@ -1852,12 +1871,19 @@ var MainBody = function MainBody(_ref) {
 
 
   var findMainBodyIndex = function findMainBodyIndex() {
-    var currentMainBodyDevoIndex = mainBodyDevo && devoBook.findIndex(function (devo) {
-      return devo.id === mainBodyDevo.id;
-    });
+    if (mainBodyDevo) {
+      var currentMainBodyDevoIndex = devoBook.findIndex(function (devo) {
+        return devo.id === (mainBodyDevo === null || mainBodyDevo === void 0 ? void 0 : mainBodyDevo.id);
+      });
+      return {
+        currentMainBodyDevoIndex: currentMainBodyDevoIndex,
+        currentDay: currentMainBodyDevoIndex + 1
+      };
+    }
+
     return {
-      currentMainBodyDevoIndex: currentMainBodyDevoIndex,
-      currentDay: currentMainBodyDevoIndex + 1
+      currentMainBodyDevoIndex: null,
+      currentDay: null
     };
   };
   /******************************
@@ -1966,48 +1992,39 @@ var MainBody = function MainBody(_ref) {
 
 
   var toggleMainBody = function toggleMainBody(type) {
+    var _devoBook, _devoBook2;
+
     var _findMainBodyIndex2 = findMainBodyIndex(),
         currentMainBodyDevoIndex = _findMainBodyIndex2.currentMainBodyDevoIndex;
 
-    var allBookTitles = [].concat(_toConsumableArray(_helpers_bookTitles__WEBPACK_IMPORTED_MODULE_9__["OTbooks"]), _toConsumableArray(_helpers_bookTitles__WEBPACK_IMPORTED_MODULE_9__["NTbooks"]));
-    console.log(book);
-    var currentBookTitleIndex = allBookTitles.indexOf(book);
-    var previousBookTitle = currentBookTitleIndex < 1 ? allBookTitles[allBookTitles.length - 1] : allBookTitles[currentBookTitleIndex - 1];
-    var nextBookTitle = currentBookTitleIndex > allBookTitles.length ? allBookTitles[0] : allBookTitles[currentBookTitleIndex + 1];
-    console.log({
-      devoBook: devoBook
-    });
-    var title = {
-      gender: gender.toUpperCase()
+    var currentBookTitleIndex = ALL_BOOK_TITLES.indexOf(book);
+    var previousBookTitle = currentBookTitleIndex === 0 ? ALL_BOOK_TITLES[ALL_BOOK_TITLES.length - 1] : ALL_BOOK_TITLES[currentBookTitleIndex - 1];
+    var nextBookTitle = currentBookTitleIndex === ALL_BOOK_TITLES.length - 1 ? ALL_BOOK_TITLES[0] : ALL_BOOK_TITLES[currentBookTitleIndex + 1];
+
+    var fetchPayload = function fetchPayload(bookTitle) {
+      var fetchBookPayload = Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_8__["createTitlePayload"])(ALL_BOOK_TITLES, {
+        gender: gender.toUpperCase(),
+        book: bookTitle.toLowerCase()
+      });
+      return fetchDevoBook(Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_8__["setPayload"])(fetchBookPayload));
     };
 
     switch (type) {
       case 'previous':
-        if (currentMainBodyDevoIndex < 1) {
-          var fetchBookPayload = Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_8__["createTitlePayload"])(allBookTitles, _objectSpread(_objectSpread({}, title), {}, {
-            book: previousBookTitle.toLowerCase()
-          }));
-          var devoPayload = Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_8__["setPayload"])(fetchBookPayload);
-          console.log({
-            devoPayload: devoPayload
-          });
-          fetchDevoBook(devoPayload);
+        if (currentMainBodyDevoIndex === 0) {
+          BOOK_TITLE_REF.prev = previousBookTitle;
+          fetchPayload(previousBookTitle);
         }
 
-        return fetchDevo(devoBook[currentMainBodyDevoIndex - 1].id);
+        return fetchDevo((_devoBook = devoBook[currentMainBodyDevoIndex - 1]) === null || _devoBook === void 0 ? void 0 : _devoBook.id);
 
       case 'next':
-        if (currentMainBodyDevoIndex > devoBook.length) {
-          var _fetchBookPayload = Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_8__["createTitlePayload"])(allBookTitles, _objectSpread(_objectSpread({}, title), {}, {
-            book: nextBookTitle.toLowerCase()
-          }));
-
-          var _devoPayload = Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_8__["setPayload"])(_fetchBookPayload);
-
-          fetchDevoBook(_devoPayload);
+        if (currentMainBodyDevoIndex === devoBook.length - 1) {
+          BOOK_TITLE_REF.next = nextBookTitle;
+          fetchPayload(nextBookTitle);
         }
 
-        return fetchDevo(devoBook[currentMainBodyDevoIndex + 1].id);
+        return fetchDevo((_devoBook2 = devoBook[currentMainBodyDevoIndex + 1]) === null || _devoBook2 === void 0 ? void 0 : _devoBook2.id);
 
       default:
         return;
@@ -2064,7 +2081,7 @@ var MainBody = function MainBody(_ref) {
    ******************************/
 
 
-  if (isEmptyMainBody && !handleLocalStorage('getCurrentPage')) {
+  if (mainBodyIsNull && !handleLocalStorage('getCurrentPage') && !devoBookIsEmpty || !id) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
   }
 
@@ -4187,7 +4204,7 @@ var capitalizeFirstLetter = function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.toLocaleLowerCase().slice(1);
 };
 var sortDevoBook = function sortDevoBook(devoBook) {
-  if (devoBook.length < 1) return devoBook;
+  if (devoBook.length < 1) return [];
   var _devoBook$ = devoBook[0],
       gender = _devoBook$.gender,
       book = _devoBook$.book;
