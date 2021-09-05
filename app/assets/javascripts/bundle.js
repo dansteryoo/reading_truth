@@ -4125,7 +4125,6 @@ var sortDevoBook = function sortDevoBook(devoBook) {
       book = _devoBook$.book;
   var reverseCheck = {
     Exodus: true,
-    Leviticus: true,
     Numbers: true,
     Deuteronomy: true,
     '1 & 2 Chronicles': true,

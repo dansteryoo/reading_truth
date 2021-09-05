@@ -53,7 +53,6 @@ export const sortDevoBook = (devoBook) => {
 	const { gender, book } = devoBook[0];
 	const reverseCheck = {
 		Exodus: true,
-		Leviticus: true,
 		Numbers: true,
 		Deuteronomy: true,
 		'1 & 2 Chronicles': true,
