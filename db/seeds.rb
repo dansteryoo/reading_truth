@@ -22,7 +22,8 @@
 # Devo.destroy_all
 # Devo.where(gender: "SHE").destroy_all
 # Devo.where(gender: "SHE", book: "Nahum, Habakkuk, Zephaniah, and Haggai").destroy_all
-Devo.where(book: "1 & 2 Timothy & Titus").destroy_all
+Devo.where(book: "Leviticus").destroy_all
+Devo.where(book: "Romans").destroy_all
 # Devo.where(book: "Isaiah").destroy_all
 # Devo.where(book: "Ezra").destroy_all
 # Devo.where(book: "1 & 2 Chronicles").destroy_all

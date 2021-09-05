@@ -75,7 +75,7 @@ export const sortDevoBook = (devoBook) => {
 	return devoBook;
 };
 
-export const isValidNumber = (num) => {
+export const isNumber = (num) => {
 	return typeof num === 'number';
 };
 
@@ -91,11 +91,11 @@ export const dayIsNumber = (day) => {
 	return true;
 };
 
-export const createTitlePayload = (arrayOfBooks, titleObject) => {
-	if (!Array.isArray(arrayOfBooks) || arrayOfBooks.length < 1)
-		return arrayOfBooks;
-	const lowercaseArray = arrayOfBooks.map((ele) => ele.toLowerCase());
-	const bookTitle = arrayOfBooks[lowercaseArray.indexOf(titleObject.book)];
+export const createTitlePayload = (arrayOfBookTitles, titleObject) => {
+	if (!Array.isArray(arrayOfBookTitles) || arrayOfBookTitles.length < 1)
+		return arrayOfBookTitles;
+	const lowercaseArray = arrayOfBookTitles.map((ele) => ele.toLowerCase());
+	const bookTitle = arrayOfBookTitles[lowercaseArray.indexOf(titleObject.book)];
 	return {
 		gender: titleObject.gender,
 		book: bookTitle,

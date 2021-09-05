@@ -206,9 +206,6 @@ export const regBibleTitles = [
 	'Revelation',
 ];
 
-// sidenav.jsx
-export const allBookTitles = [...OTbooks, ...NTbooks, ...themeBooks];
-
 // categories.jsx
 export const bibleBooksForIndexing = [
 	'Genesis',

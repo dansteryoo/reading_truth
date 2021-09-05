@@ -1,126 +1,272 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useMount } from 'ahooks';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { closeModal, openModal } from '../../actions/modal_actions';
-import { fetchDevo } from '../../actions/devo_actions';
+import { fetchDevo, fetchDevoBook } from '../../actions/devo_actions';
 import { clearErrors } from '../../actions/session_actions';
 import {
 	createBookmark,
 	fetchBookmark,
 	deleteBookmark,
 } from '../../actions/bookmark_actions';
-import { sortDevoBook } from '../../helpers/helperFunctions';
-import { regBibleTitles, maxMcLeanBooks } from '../../helpers/bookTitles';
+import {
+	sortDevoBook,
+	isNumber,
+	setPayload,
+	createTitlePayload,
+} from '../../helpers/helperFunctions';
+import {
+	regBibleTitles,
+	maxMcLeanBooks,
+	OTbooks, 
+	NTbooks, 
+} from '../../helpers/bookTitles';
 
-class MainBody extends React.Component {
-	constructor(props) {
-		super(props);
+const ALL_BOOK_TITLES = [...OTbooks, ...NTbooks];
+const BOOK_TITLE_REF = {
+	prev: null,
+	next: null,
+}
 
-		this.state = {
-			bookmarkId: '',
-			gender: '',
-			book: '',
-			id: '',
-			title: '',
-			passages: [],
-			summary: '',
-			img: '',
-			esvPassage: [],
-			mainBodyChanged: false,
-			bookmark: false,
-			renderDay: '',
-		};
-
-		this.ESVpassageGetter = this.ESVpassageGetter.bind(this);
-		this.myRef = React.createRef();
-		this.toggleBookmark = this.toggleBookmark.bind(this);
-		this.toggleAudio = this.toggleAudio.bind(this);
-		this.toggleMainBody = this.toggleMainBody.bind(this);
-		this.isMainBodyDevoNull = this.isMainBodyDevoNull.bind(this);
-		this.userBookmarkBlank = this.userBookmarkBlank.bind(this);
-		this.setBookmark = this.setBookmark.bind(this);
-		this.localStorageFunc = this.localStorageFunc.bind(this);
-		this.splitPassages = this.splitPassages.bind(this);
-		this.isValidNumber = this.isValidNumber.bind(this);
-		this.findMainBodyIndex = this.findMainBodyIndex.bind(this);
+const splitPassages = (passages) => {
+	if (passages.length > 0) {
+		return passages.split(', ').map((ele) => ele.trim());
 	}
+};
+const checkForNumber = (data) => {
+	return data.match(/^([1-9]|[1-8][0-9]|9[0-9]|1[0-4][0-9]|150)$/g);
+};
 
-	//---------- ESV.ORG API CALL ----------//
+/******************************
+ *     MainBody Component     *
+ ******************************/
 
-	ESVpassageGetter(passages) {
-		const esvKeys = [window.esv_one, window.esv_two, window.esv_three, window.esv_four, window.esv_five, window.esv_six];
-		let randomGen = esvKeys[Math.floor(Math.random() * esvKeys.length)];
-		let esvArr = [];
+const MainBody = ({
+	mainBodyDevo,
+	currentUser,
+	fetchDevo,
+	fetchDevoBook,
+	bookmark,
+	createBookmark,
+	deleteBookmark,
+	devoBook,
+}) => {
+	const mainBodyIsNull = mainBodyDevo === null;
+	const devoBookIsEmpty = devoBook.length < 1;
+	const [bookmarkId, setBookmarkId] = useState('');
+	const [id, setId] = useState('');
+	const [gender, setGender] = useState('');
+	const [book, setBook] = useState('');
+	const [title, setTitle] = useState('');
+	const [passages, setPassage] = useState([]);
+	const [esvPassage, setEsvPassage] = useState([]);
+	const [summary, setSummary] = useState('');
+	const [img, setImg] = useState('');
+	const [renderDay, setRenderDay] = useState('');
+	const [isBookmarked, setIsBookmarked] = useState(false);
+	const [mainBodyChanged, setMainBodyChanged] = useState(false);
 
-		Promise.all(
-			this.splitPassages(passages).map((passage) => {
-				axios
-					.get('https://api.esv.org/v3/passage/text/?', {
-						crossDomain: true,
-						params: {
-							q: passage,
-							'include-headings': false,
-							'include-footnotes': false,
-							'include-verse-numbers': false,
-							'include-short-copyright': false,
-							'include-passage-references': false,
-						},
-						headers: {
-							Authorization: randomGen,
-						},
-					})
-					.then((res) => {
-						if (res.status === 200) {
-							return esvArr.push({
-								passage: res.config.params.q,
-								text: res.data.passages[0],
-							});
-						}
-					})
-					.then(() => {
-						esvArr.length == this.splitPassages(passages).length && this.setState({ esvPassage: esvArr });
-					});
-			})
-		);
-	}
+	/******************************
+	 *          useMount          *
+	 ******************************/
 
-	setBookmark() {
-		//---------- SET BOOKMARK TO TRUE ----------//
-		if (!this.state.bookmark && this.state.mainBodyChanged) {
-			if (this.localStorageFunc('getCurrentPage') && this.localStorageFunc('getCurrentPage').id === this.state.id) {
-				return this.setState({ bookmark: true });
+	useMount(() => {
+		const currentPage = handleLocalStorage('getCurrentPage');
+		if (currentPage) {
+			return fetchDevo(currentPage.id).then(() => {
+				setRenderDay(currentPage.renderDay);
+				setBookmarkId(currentPage.bookmarkId);
+				setIsBookmarked(true);
+			});
+		} else if (currentUser?.bookmark) {
+			return fetchDevo(currentUser.bookmark.devo_id).then(() => {
+				setRenderDay(currentUser.bookmark.render_day);
+				setBookmarkId(currentUser.bookmark.id);
+				setIsBookmarked(true);
+			});
+		}
+	});
+
+	/******************************
+	 *         useEffect          *
+	 ******************************/
+
+	// render mainBody from different devoBookTitle
+	useEffect(() => {
+		if (!devoBookIsEmpty && devoBook[0].book !== book) {
+			setId(null);
+			const currentBookTitle = devoBook[0].book;
+
+			if (currentBookTitle === BOOK_TITLE_REF.prev) {
+				fetchDevo(devoBook[devoBook.length - 1].id);
+				BOOK_TITLE_REF.prev = null;
+			}
+			if (currentBookTitle === BOOK_TITLE_REF.next) {
+				fetchDevo(devoBook[0].id);
+				BOOK_TITLE_REF.next = null;
 			}
 		}
-	}
+	}, [devoBook]);
 
-	isValidNumber(number) {
-		return typeof number === 'number';
-	}
+	// render mainBody from different devo of same devoBookTitle
+	useEffect(() => {
+		if (mainBodyChanged) setMainBodyChanged(false);
+		const { currentDay } = findMainBodyIndex();
+		if (currentDay && currentDay !== renderDay) setRenderDay(currentDay);
 
-	splitPassages(passages) {
-		if (passages.length > 0) {
-			return passages.split(', ').map((ele) => ele.trim());
+		if (mainBodyDevo?.id && id !== mainBodyDevo.id) {
+			handleGetEsvPassages(mainBodyDevo.passages);
+			setId(mainBodyDevo.id);
+			setPassage(mainBodyDevo.passages);
+			setSummary(mainBodyDevo.summary);
+			setTitle(mainBodyDevo.title);
+			setGender(mainBodyDevo.gender);
+			setBook(mainBodyDevo.book);
+			setMainBodyChanged(true);
+			setIsBookmarked(false);
+			setImg(
+				gender === 'SHE'
+					? img === ''
+						? 'https://res.cloudinary.com/dmwoxjusp/image/upload/v1630169994/shereads-logo_s9lsvp.jpg'
+						: img
+					: img === ''
+					? 'https://res.cloudinary.com/dmwoxjusp/image/upload/v1630169994/hereads-logo_r2fecj.jpg'
+					: img
+			);
 		}
-	}
+	}, [mainBodyDevo]);
 
-	isMainBodyDevoNull() {
-		return this.props.mainBodyDevo === null;
-	}
+	// render bookmarks
+	useEffect(() => {
+		const hasNoBookmark = Object.values(bookmark).length < 1;
 
-	userBookmarkBlank() {
-		const { bookmark } = this.props.currentUser;
-		return bookmark == (undefined || null);
-	}
+		if (
+			!hasNoBookmark &&
+			bookmarkId !== bookmark.id &&
+			id === bookmark.devo_id
+		) {
+			setBookmarkId(bookmark.id);
+		}
 
-	localStorageFunc(condition) {
-		let userId = JSON.stringify(this.props.currentUser.id);
+		if (
+			!isNumber(bookmarkId) &&
+			hasNoBookmark &&
+			currentUser.bookmark &&
+			bookmarkId !== currentUser.bookmark.id
+		) {
+			setBookmarkId(currentUser.bookmark.id);
+		}
 
-		switch (condition) {
+		if (
+			!isBookmarked &&
+			mainBodyChanged &&
+			handleLocalStorage('getCurrentPage') &&
+			handleLocalStorage('getCurrentPage').id === id
+		) {
+			setIsBookmarked(true);
+		}
+	}, [bookmark, currentUser?.bookmark]);
+
+	/******************************
+	 *    handleGetEsvPassages    *
+	 ******************************/
+
+	const handleGetEsvPassages = async (passages) => {
+		if (passages.length < 1) return;
+		setEsvPassage([]);
+		const esvKeys = [
+			window.esv_one,
+			window.esv_two,
+			window.esv_three,
+			window.esv_four,
+			window.esv_five,
+			window.esv_six,
+		];
+		const randomGen = esvKeys[Math.floor(Math.random() * esvKeys.length)];
+		const passagesArray = splitPassages(passages);
+		const getPassages = passagesArray.map((passage) => {
+			return axios.get('https://api.esv.org/v3/passage/text/?', {
+				crossDomain: true,
+				params: {
+					q: passage,
+					'include-headings': false,
+					'include-footnotes': false,
+					'include-verse-numbers': false,
+					'include-short-copyright': false,
+					'include-passage-references': false,
+				},
+				headers: {
+					Authorization: randomGen,
+				},
+			});
+		});
+
+		return Promise.all(getPassages)
+			.then((results) => {
+				const esvArray = results.reduce((arr, { status, config, data }) => {
+					if (status === 200) {
+						arr.push({
+							passage: config.params.q,
+							text: data.passages[0],
+						});
+					}
+					return arr;
+				}, []);
+				setEsvPassage(esvArray);
+			})
+			.catch((err) => console.log({ err }));
+	};
+
+	/******************************
+	 *    findMainBodyIndex    *
+	 ******************************/
+
+	const findMainBodyIndex = () => {
+		if (mainBodyDevo) {
+			const currentMainBodyDevoIndex = devoBook.findIndex(
+				(devo) => devo.id === mainBodyDevo?.id
+			);
+			return {
+				currentMainBodyDevoIndex,
+				currentDay: currentMainBodyDevoIndex + 1,
+			};
+		}
+		return {
+			currentMainBodyDevoIndex: null,
+			currentDay: null,
+		};
+	};
+
+	/******************************
+	 *     handleLocalStorage     *
+	 ******************************/
+
+	const handleLocalStorage = (type) => {
+		let userId = JSON.stringify(currentUser.id);
+
+		switch (type) {
 			case 'getCurrentPage':
 				return JSON.parse(localStorage.getItem(userId));
 
 			case 'setCurrentPage':
-				return localStorage.setItem(userId, JSON.stringify(this.state));
+				return localStorage.setItem(
+					userId,
+					JSON.stringify({
+						bookmarkId,
+						gender,
+						book,
+						id,
+						title,
+						passages,
+						summary,
+						img,
+						esvPassage,
+						mainBodyChanged,
+						bookmark,
+						renderDay,
+					})
+				);
 
 			case 'removeCurrentPage':
 				return localStorage.removeItem(userId);
@@ -128,108 +274,25 @@ class MainBody extends React.Component {
 			default:
 				return;
 		}
-	}
+	};
 
-	//---------- REACT LIFE CYCLES ----------//
+	/******************************
+	 *       renderPassages       *
+	 ******************************/
 
-	componentDidMount() {
-		this.setBookmark();
-		const currentPage = this.localStorageFunc('getCurrentPage');
-		const { currentUser, fetchDevo } = this.props;
-
-		//---------- IF localStorage EXISTS then setState ----------//
-		if (currentPage) {
-			return fetchDevo(currentPage.id).then(() =>
-				this.setState({
-					renderDay: currentPage.render_day,
-					bookmarkId: currentPage.bookmarkId,
-					bookmark: true,
-				})
-			);
-		} else if (!this.userBookmarkBlank()) {
-			return fetchDevo(currentUser.bookmark.devo_id).then(() =>
-				this.setState({
-					renderDay: currentUser.bookmark.render_day,
-					bookmarkId: currentUser.bookmark.id,
-					bookmark: true,
-				})
-			);
-		}
-	}
-
-	componentDidUpdate(prevProps) {
-		this.setBookmark();
-		const { bookmark, mainBodyDevo, currentUser } = this.props;
-		const { bookmarkId, id, renderDay, mainBodyChanged } = this.state;
-		const bookmarkBlank = Object.values(bookmark).length < 1;
-
-		if (this.isMainBodyDevoNull()) return;
-
-		//---------- SET bookmarkId === bookmark.id ----------//
-		!bookmarkBlank && bookmarkId !== bookmark.id && id === bookmark.devo_id && this.setState({ bookmarkId: bookmark.id });
-
-		//---------- SET bookmarkId === currentUser.bookmark.id ----------//
-		!this.isValidNumber(bookmarkId) &&
-			bookmarkBlank &&
-			currentUser.bookmark &&
-			bookmarkId !== currentUser.bookmark.id &&
-			this.setState({ bookmarkId: currentUser.bookmark.id });
-
-		//---------- SET renderDay to this.findMainBodyIndex() + 1 ----------//
-		const newRenderDay = this.findMainBodyIndex() + 1;
-		newRenderDay !== renderDay && this.setState({ renderDay: newRenderDay });
-
-		//---------- PREVENTS MULTIPLE this.setState on update ----------//
-		mainBodyChanged && this.setState({ mainBodyChanged: false });
-
-		//---------- UPDATES new mainBodyDevo ----------//
-		if (prevProps.mainBodyDevo !== mainBodyDevo) {
-			const { id, img, passages, summary, title, gender, book } = mainBodyDevo;
-
-			//---------- SCROLL TO TOP on render ----------//
-			this.myRef.current.scrollTo(0, 0);
-
-			//---------- PREVENTS DUPS in esvPassage ----------//
-			this.setState({ esvPassage: [] });
-			this.ESVpassageGetter(passages);
-			const devoImage =
-				gender === 'SHE'
-					? img === ''
-						? 'https://res.cloudinary.com/dmwoxjusp/image/upload/v1630169994/shereads-logo_s9lsvp.jpg'
-						: img
-					: img === ''
-					? 'https://res.cloudinary.com/dmwoxjusp/image/upload/v1630169994/hereads-logo_r2fecj.jpg'
-					: img; 
-	
-			this.setState({
-				id,
-				img: devoImage,
-				passages,
-				summary,
-				title,
-				gender,
-				book,
-				mainBodyChanged: true,
-				bookmark: false,
-			});
-		}
-	}
-
-	//---------- render FUNCTIONS ----------//
-
-	renderPassages() {
-		const { passages, esvPassage } = this.state;
+	const renderPassages = () => {
 		if (passages.length < 1) return;
+		const arrayOfPassages = splitPassages(passages);
+		if (esvPassage.length !== arrayOfPassages.length) return;
 
-		const passagesArray = this.splitPassages(passages);
-		if (esvPassage.length !== passagesArray.length) return;
-
-		let esvSortMatch = esvPassage.sort(function (a, b) {
-			return passagesArray.indexOf(a.passage) - passagesArray.indexOf(b.passage);
+		const esvSortMatch = esvPassage.sort(function (a, b) {
+			return (
+				arrayOfPassages.indexOf(a.passage) - arrayOfPassages.indexOf(b.passage)
+			);
 		});
 
 		//---------- CATCH undefined ESV API returns ----------//
-		let newEsvData = esvSortMatch.filter((ele, i) => {
+		const newEsvData = esvSortMatch.filter((ele, i) => {
 			if (!ele.text) {
 				return console.log(`ESV PASSAGE ERROR IN: 
                     index(${i}), 
@@ -242,15 +305,15 @@ class MainBody extends React.Component {
 		return newEsvData.map((each, i) => {
 			//---------- itemCount TRACKING each item ----------//
 			const itemCount = [];
-			let eachText = each.text.split('\n').map((item, j) => {
-				//---------- itemCount.push STORES each item into itemCount ----------//
-				itemCount.push(item.trim());
+			const eachText = each.text.split('\n').map((passageText, j) => {
+				//---------- passageTextCount.push STORES each passageText into passageTextCount ----------//
+				itemCount.push(passageText.trim());
 
-				//---------- checking if prevItem !== current item ----------//
-				if (itemCount[j - 1] !== item.trim()) {
+				//---------- checking if prevItem !== current passageText ----------//
+				if (itemCount[j - 1] !== passageText.trim()) {
 					return (
 						<p key={'bible-text' + j}>
-							{item}
+							{passageText}
 							<br />
 						</p>
 					);
@@ -266,17 +329,22 @@ class MainBody extends React.Component {
 				</li>
 			);
 		});
-	}
+	};
 
-	renderSummary() {
+	/******************************
+	 *    renderSummary    *
+	 ******************************/
+
+	const renderSummary = () => {
 		const eleCount = [];
 
-		return this.state.summary.split('\n').map((ele, i) => {
+		return summary.split('\n').map((ele, i) => {
 			const scripture = ele.slice(0, 17) === 'Scripture Reading';
 			const text = ele.slice(0, 5) === 'Text:';
 			const author_1 = ele.slice(0, 10) === 'Written by';
 			const author_2 = ele.slice(0, 10) === 'Written By';
-			const eleCountMatch = eleCount[i - 1] === ele.trim() && ele.trim().length < 1;
+			const eleCountMatch =
+				eleCount[i - 1] === ele.trim() && ele.trim().length < 1;
 
 			//---------- eleCount.push STORES each item into eleCount ----------//
 			scripture || text ? eleCount.push('') : eleCount.push(ele.trim());
@@ -295,63 +363,82 @@ class MainBody extends React.Component {
 				);
 			}
 		});
-	}
+	};
 
-	findMainBodyIndex() {
-		const { mainBodyDevo, devoBook } = this.props;
-		return devoBook.findIndex((devo) => devo.id === mainBodyDevo.id);
-	}
+	/******************************
+	 *       toggleMainBody       *
+	 ******************************/
 
-	toggleMainBody(type) {
-		const { devoBook, fetchDevo } = this.props;
-		const mainBodyIndex = this.findMainBodyIndex();
+	const toggleMainBody = (type) => {
+		const { currentMainBodyDevoIndex } = findMainBodyIndex();
+		const currentBookTitleIndex = ALL_BOOK_TITLES.indexOf(book);
+
+		const previousBookTitle =
+			currentBookTitleIndex === 0
+				? ALL_BOOK_TITLES[ALL_BOOK_TITLES.length - 1]
+				: ALL_BOOK_TITLES[currentBookTitleIndex - 1];
+
+		const nextBookTitle =
+			currentBookTitleIndex === ALL_BOOK_TITLES.length - 1
+				? ALL_BOOK_TITLES[0]
+				: ALL_BOOK_TITLES[currentBookTitleIndex + 1];
+
+		const fetchPayload = (bookTitle) => {
+			const fetchBookPayload = createTitlePayload(ALL_BOOK_TITLES, {
+				gender: gender.toUpperCase(),
+				book: bookTitle.toLowerCase(),
+			});
+			return fetchDevoBook(setPayload(fetchBookPayload));
+		};
 
 		switch (type) {
 			case 'previous':
-				if (mainBodyIndex === 0) return;
-				return fetchDevo(devoBook[mainBodyIndex - 1].id);
+				if (currentMainBodyDevoIndex === 0) {
+					BOOK_TITLE_REF.prev = previousBookTitle;
+					fetchPayload(previousBookTitle);
+				}
+				return fetchDevo(devoBook[currentMainBodyDevoIndex - 1]?.id);
 
 			case 'next':
-				if (mainBodyIndex === devoBook.length - 1) return;
-				return fetchDevo(devoBook[mainBodyIndex + 1].id);
+				if (currentMainBodyDevoIndex === devoBook.length - 1) {
+					BOOK_TITLE_REF.next = nextBookTitle;
+					fetchPayload(nextBookTitle);
+				}
+				return fetchDevo(devoBook[currentMainBodyDevoIndex + 1]?.id);
 
 			default:
 				return;
 		}
-	}
+	};
 
-	toggleBookmark() {
-		const { bookmark, id, renderDay, gender, book, bookmarkId } = this.state;
-		const { currentUser, createBookmark, deleteBookmark } = this.props;
+	/******************************
+	 *       toggleBookmark       *
+	 ******************************/
 
-		let bookmarkData = {
-			gender,
-			book,
-			user_id: currentUser.id,
-			devo_id: id,
-			render_day: renderDay,
-		};
-
-		if (bookmark) {
+	const toggleBookmark = () => {
+		if (isBookmarked) {
 			deleteBookmark(bookmarkId);
-			this.localStorageFunc('removeCurrentPage');
+			handleLocalStorage('removeCurrentPage');
 		} else {
-			createBookmark(bookmarkData);
+			createBookmark({
+				gender,
+				book,
+				user_id: currentUser.id,
+				devo_id: id,
+				render_day: renderDay,
+			});
 		}
+		setIsBookmarked(!isBookmarked);
+	};
 
-		this.setState({ bookmark: !bookmark });
-	}
+	/******************************
+	 *        toggleAudio         *
+	 ******************************/
 
-	toggleAudio() {
-		const { esvPassage } = this.state;
+	const toggleAudio = () => {
 		const passageSplit = esvPassage[0].passage.split(' ');
-
-		const checkForNumber = (data) => {
-			return data.match(/^([1-9]|[1-8][0-9]|9[0-9]|1[0-4][0-9]|150)$/g);
-		};
-
+		const chapter = passageSplit[passageSplit.length - 1].split(':')[0];
 		let book = passageSplit[0];
-		let chapter = passageSplit[passageSplit.length - 1].split(':')[0];
 
 		if (checkForNumber(book)) {
 			book = `${book} ${passageSplit[1]}`;
@@ -359,69 +446,94 @@ class MainBody extends React.Component {
 			book = 'Song of Songs';
 		}
 
-		let bookName = maxMcLeanBooks[regBibleTitles.indexOf(book)];
-		let theURL = `https://www.biblegateway.com/audio/mclean/esv/${bookName}.${chapter}`;
-		let winName = 'Max McLean Audio';
-		let winParams = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
+		const bookName = maxMcLeanBooks[regBibleTitles.indexOf(book)];
+		const url = `https://www.biblegateway.com/audio/mclean/esv/${bookName}.${chapter}`;
+		const windowName = 'Max McLean Audio';
+		const windowParams = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
             width=330,height=460,left=100,top=100`;
 
-		bookName !== undefined && window.open(theURL, winName, winParams);
+		if (bookName !== undefined) {
+			return window.open(url, windowName, windowParams);
+		}
+	};
+
+	/******************************
+	 *          render            *
+	 ******************************/
+
+	if (
+		(mainBodyIsNull &&
+			!handleLocalStorage('getCurrentPage') &&
+			!devoBookIsEmpty) ||
+		!id
+	) {
+		return <></>;
 	}
-
-	render() {
-		if (this.isMainBodyDevoNull() && !this.localStorageFunc('getCurrentPage')) return <div></div>;
-
-		this.state.bookmark && this.isValidNumber(this.state.bookmarkId) && this.localStorageFunc('setCurrentPage');
-
-		return (
-			<div className='middle-container'>
-				<div className='devo-main-title-wrapper'>
-					<div className='devo-main-title'>
-						<span className='devo-main-day'>Day {this.state.renderDay}:</span>
-						<span>{this.state.title}</span>
-					</div>
-					<div className='devo-main-title-icons'>
-						<i id='previous-arrow' className='fas fa-caret-left icons' onClick={() => this.toggleMainBody('previous')}></i>
-						<i id='next-arrow' className='fas fa-caret-right icons' onClick={() => this.toggleMainBody('next')}></i>
-						<i id='max-mclean-audio' className='fa fa-volume-up icons' onClick={() => this.toggleAudio()} aria-hidden='true'></i>
-						<i
-							id='bookmark'
-							className={this.state.bookmark ? 'fa fa-bookmark icons' : 'fa fa-bookmark-o icons'}
-							onClick={() => this.toggleBookmark()}
-							aria-hidden='true'
-						></i>
-					</div>
+	if (isBookmarked && isNumber(bookmarkId)) {
+		handleLocalStorage('setCurrentPage');
+	}
+	return (
+		<div className='middle-container'>
+			<div className='devo-main-title-wrapper'>
+				<div className='devo-main-title'>
+					<span className='devo-main-day'>Day {renderDay}:</span>
+					<span>{title}</span>
 				</div>
-				<div className='devo-main-container' ref={this.myRef}>
-					<div className='form-or-separator-mainbody-passages'>
-						<hr />
-					</div>
-					<div className='devo-main-passages'>
-						<span>{this.renderPassages()}</span>
-					</div>
-					<div className='form-or-separator-mainbody-summary'>
-						<hr />
-					</div>
-					<div className='devo-main-body'>
-						<br />
-						<div>{this.renderSummary()}</div>
-						<br />
-					</div>
-					<div className='form-or-separator-mainbody-image'>
-						<hr />
-					</div>
-					<div className='devo-main-image'>
-						<img src={this.state.img} />
-					</div>
+				<div className='devo-main-title-icons'>
+					<i
+						id='previous-arrow'
+						className='fas fa-caret-left icons'
+						onClick={() => toggleMainBody('previous')}
+					></i>
+					<i
+						id='next-arrow'
+						className='fas fa-caret-right icons'
+						onClick={() => toggleMainBody('next')}
+					></i>
+					<i
+						id='max-mclean-audio'
+						className='fa fa-volume-up icons'
+						onClick={() => toggleAudio()}
+						aria-hidden='true'
+					></i>
+					<i
+						id='bookmark'
+						className={
+							isBookmarked ? 'fa fa-bookmark icons' : 'fa fa-bookmark-o icons'
+						}
+						onClick={() => toggleBookmark()}
+						aria-hidden='true'
+					></i>
 				</div>
 			</div>
-		);
-	}
-}
+			<div className='devo-main-container'>
+				<div className='form-or-separator-mainbody-passages'>
+					<hr />
+				</div>
+				<div className='devo-main-passages'>
+					<span>{renderPassages()}</span>
+				</div>
+				<div className='form-or-separator-mainbody-summary'>
+					<hr />
+				</div>
+				<div className='devo-main-body'>
+					<br />
+					<div>{renderSummary()}</div>
+					<br />
+				</div>
+				<div className='form-or-separator-mainbody-image'>
+					<hr />
+				</div>
+				<div className='devo-main-image'>
+					<img src={img} />
+				</div>
+			</div>
+		</div>
+	);
+};
 
 const mapState = ({ session, users, devos, bookmark, errors }) => {
 	const devoBook = devos.devoBook ? Object.values(devos.devoBook) : [];
-
 	return {
 		currentUser: users[session.id],
 		mainBodyDevo: devos.mainBodyDevo ?? null,
@@ -439,6 +551,7 @@ const mapDispatch = (dispatch) => ({
 	createBookmark: (bookmark) => dispatch(createBookmark(bookmark)),
 	fetchBookmark: () => dispatch(fetchBookmark()),
 	deleteBookmark: (bookmarkId) => dispatch(deleteBookmark(bookmarkId)),
+	fetchDevoBook: (book) => dispatch(fetchDevoBook(book)),
 });
 
 export default connect(mapState, mapDispatch)(MainBody);
