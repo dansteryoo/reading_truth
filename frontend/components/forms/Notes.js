@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { connect } from 'react-redux';
 import { fetchNotes, updateNote, createNote } from '../../actions/note_actions';
 import { clearErrors } from '../../actions/session_actions';
@@ -124,6 +126,8 @@ const Notes = ({
 		e.preventDefault();
 		setIsLoading(true);
 		const noteObject = { id, title, category: book, day, body };
+		debugger;
+		console.log(noteObject)
 
 		if (
 			wordIsBlank(title) ||
@@ -282,12 +286,11 @@ const Notes = ({
 						<label>Body </label>
 						{renderErrors().body}
 					</div>
-					<textarea
+					<ReactQuill
 						className='notes-form-textarea'
-						placeholder={'Enter note here..'}
-						onChange={(e) => setBody(e.target.value)}
+						theme='snow'
 						value={body}
-						// required
+						onChange={setBody}
 					/>
 					{renderFormButton()}
 				</div>
