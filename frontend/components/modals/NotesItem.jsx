@@ -1,17 +1,18 @@
 import React from "react";
 
 const styles = {
-    container: "note-button-container",
-    front: "note-front",
-    bottom: "note-bottom",
-    title: "note-title",
-    body: "note-body",
-    time: "note-time",
-    back: "note-back",
-    delete: "note-delete",
-    update: "note-update",
-    cancel: "note-cancel",
-    deleteBody: "note-delete-body",
+	containerFront: 'note-button-container-front',
+	containerBack: 'note-button-container-back',
+	front: 'note-front',
+	bottom: 'note-bottom',
+	title: 'note-title',
+	body: 'note-body',
+	time: 'note-time',
+	back: 'note-back',
+	delete: 'note-delete',
+	update: 'note-update',
+	cancel: 'note-cancel',
+	deleteBody: 'note-delete-body',
 };
 
 /******************************
@@ -54,10 +55,6 @@ const NotesItem = ({
                     <span>Day {eachNote.day}: </span>
                     {eachNote.title}
                 </div>
-                <div className={styles.body}>
-                    <span>Preview: </span>
-                    {eachNote.body}
-                </div>
                 <div className={styles.time}>
                     <span>Created: </span>
                     {formateDate(eachNote.created_at)}
@@ -66,7 +63,7 @@ const NotesItem = ({
                     {formateDate(eachNote.updated_at)}
                 </div>
 
-                <div className={styles.container}>
+                <div className={styles.containerFront}>
                     <button
                         className={styles.update}
                         onClick={() => handleUpdate(eachNote.id)}
@@ -87,7 +84,7 @@ const NotesItem = ({
              ******************************/}
 
             <div className={styles.back}>
-                <div className={styles.container}>
+                <div className={styles.containerBack}>
                     <button
                         className={styles.delete}
                         onClick={() => handleDelete(eachNote.id)}

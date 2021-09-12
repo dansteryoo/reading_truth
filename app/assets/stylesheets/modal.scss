@@ -9,6 +9,8 @@ $green: #00a699;
 $orange: #ff5a5f;
 $pink: #ffc0cb;
 $darkpink: #ff8da1;
+$noteWidth: 180px;
+$noteHeight: 160px;
 
 .modal-background {
   position: fixed;
@@ -252,7 +254,7 @@ $darkpink: #ff8da1;
     flex-direction: column;
     position: absolute;
     min-width: 1120px;
-    width: 73%;
+    width: 72%;
     height: 70%;
     min-height: 490px;
     top: 50%;
@@ -451,8 +453,8 @@ $darkpink: #ff8da1;
     padding: 15px 20px;
     border-radius: 10px;
     margin: 10px;
-    width: 220px;
-    height: 185px;
+    width: $noteWidth;
+    height: $noteHeight;
     font-size: 12px;
     letter-spacing: 0.02em;
 
@@ -497,8 +499,8 @@ $darkpink: #ff8da1;
     border: 1px solid $lightgray;
     border-radius: 10px;
     box-shadow: 0 2px 6px 0 $lightgray;
-    width: 220px;
-    height: 185px;
+    width: $noteWidth;
+    height: $noteHeight;
     top: -1px;
     left: -1px;
     -webkit-font-smoothing: antialiased;
@@ -519,10 +521,19 @@ $darkpink: #ff8da1;
     }
 }
 
-.note-button-container {
+.note-button-container-back {
   display: flex;
   justify-content: space-between;
-  width: 218px;
+  width: $noteWidth;
+}
+
+.note-button-container-front {
+    display: flex;
+    justify-content: space-between;
+    width: $noteWidth;
+    height: 80px;
+    align-items: center;
+} 
 
   .note-delete,
   .note-update,
@@ -564,7 +575,6 @@ $darkpink: #ff8da1;
     opacity: 60%;
     box-shadow: 0 2px 7px 2px $lightgray;
   }
-}
 
 //------------------Categories Page Modal
 
