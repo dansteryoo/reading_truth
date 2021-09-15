@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import './quill.snow.css';
 import { connect } from 'react-redux';
 import { fetchNotes, updateNote, createNote } from '../../actions/note_actions';
 import { clearErrors } from '../../actions/session_actions';
