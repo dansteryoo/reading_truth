@@ -124,7 +124,6 @@ const MainBody = ({
 			setGender(mainBodyDevo.gender);
 			setBook(mainBodyDevo.book);
 			setMainBodyChanged(true);
-			setIsBookmarked(false);
 			setImg(
 				gender === 'SHE'
 					? img === ''
@@ -134,39 +133,18 @@ const MainBody = ({
 					? 'https://res.cloudinary.com/dmwoxjusp/image/upload/v1630169994/hereads-logo_r2fecj.jpg'
 					: img
 			);
+			
+			const currentPage = handleLocalStorage('getCurrentPage');
+			if (currentPage?.id === mainBodyDevo.id) {
+				console.log(currentPage.id, mainBodyDevo.id)
+				setBookmarkId(currentPage.bookmarkId);
+				setIsBookmarked(true);
+			} else {
+				setBookmarkId('');
+				setIsBookmarked(false);
+			}
 		}
 	}, [mainBodyDevo]);
-
-	// render bookmarks
-	useEffect(() => {
-		const hasNoBookmark = Object.values(bookmark).length < 1;
-
-		if (
-			!hasNoBookmark &&
-			bookmarkId !== bookmark.id &&
-			id === bookmark.devo_id
-		) {
-			setBookmarkId(bookmark.id);
-		}
-
-		if (
-			!isNumber(bookmarkId) &&
-			hasNoBookmark &&
-			currentUser.bookmark &&
-			bookmarkId !== currentUser.bookmark.id
-		) {
-			setBookmarkId(currentUser.bookmark.id);
-		}
-
-		if (
-			!isBookmarked &&
-			mainBodyChanged &&
-			handleLocalStorage('getCurrentPage') &&
-			handleLocalStorage('getCurrentPage').id === id
-		) {
-			setIsBookmarked(true);
-		}
-	}, [bookmark, currentUser?.bookmark]);
 
 	/******************************
 	 *    handleGetEsvPassages    *
@@ -431,6 +409,7 @@ const MainBody = ({
 				devo_id: id,
 				render_day: renderDay,
 			});
+			handleLocalStorage('setCurrentPage');
 		}
 		setIsBookmarked(!isBookmarked);
 	};
@@ -465,17 +444,7 @@ const MainBody = ({
 	 *          render            *
 	 ******************************/
 
-	if (
-		(mainBodyIsNull &&
-			!handleLocalStorage('getCurrentPage') &&
-			!devoBookIsEmpty) ||
-		!id
-	) {
-		return <></>;
-	}
-	if (isBookmarked && isNumber(bookmarkId)) {
-		handleLocalStorage('setCurrentPage');
-	}
+	if ((mainBodyIsNull && !devoBookIsEmpty) || !id) return <></>;
 	return (
 		<div className='middle-container'>
 			<div className='devo-main-title-wrapper'>

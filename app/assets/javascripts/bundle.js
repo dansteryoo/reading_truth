@@ -1806,26 +1806,19 @@ var MainBody = function MainBody(_ref) {
       setGender(mainBodyDevo.gender);
       setBook(mainBodyDevo.book);
       setMainBodyChanged(true);
-      setIsBookmarked(false);
       setImg(gender === 'SHE' ? img === '' ? 'https://res.cloudinary.com/dmwoxjusp/image/upload/v1630169994/shereads-logo_s9lsvp.jpg' : img : img === '' ? 'https://res.cloudinary.com/dmwoxjusp/image/upload/v1630169994/hereads-logo_r2fecj.jpg' : img);
-    }
-  }, [mainBodyDevo]); // render bookmarks
+      var currentPage = handleLocalStorage('getCurrentPage');
 
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    var hasNoBookmark = Object.values(bookmark).length < 1;
-
-    if (!hasNoBookmark && bookmarkId !== bookmark.id && id === bookmark.devo_id) {
-      setBookmarkId(bookmark.id);
+      if ((currentPage === null || currentPage === void 0 ? void 0 : currentPage.id) === mainBodyDevo.id) {
+        console.log(currentPage.id, mainBodyDevo.id);
+        setBookmarkId(currentPage.bookmarkId);
+        setIsBookmarked(true);
+      } else {
+        setBookmarkId('');
+        setIsBookmarked(false);
+      }
     }
-
-    if (!Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_8__["isNumber"])(bookmarkId) && hasNoBookmark && currentUser.bookmark && bookmarkId !== currentUser.bookmark.id) {
-      setBookmarkId(currentUser.bookmark.id);
-    }
-
-    if (!isBookmarked && mainBodyChanged && handleLocalStorage('getCurrentPage') && handleLocalStorage('getCurrentPage').id === id) {
-      setIsBookmarked(true);
-    }
-  }, [bookmark, currentUser === null || currentUser === void 0 ? void 0 : currentUser.bookmark]);
+  }, [mainBodyDevo]);
   /******************************
    *    handleGetEsvPassages    *
    ******************************/
@@ -2085,6 +2078,7 @@ var MainBody = function MainBody(_ref) {
         devo_id: id,
         render_day: renderDay
       });
+      handleLocalStorage('setCurrentPage');
     }
 
     setIsBookmarked(!isBookmarked);
@@ -2119,14 +2113,7 @@ var MainBody = function MainBody(_ref) {
    ******************************/
 
 
-  if (mainBodyIsNull && !handleLocalStorage('getCurrentPage') && !devoBookIsEmpty || !id) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
-  }
-
-  if (isBookmarked && Object(_helpers_helperFunctions__WEBPACK_IMPORTED_MODULE_8__["isNumber"])(bookmarkId)) {
-    handleLocalStorage('setCurrentPage');
-  }
-
+  if (mainBodyIsNull && !devoBookIsEmpty || !id) return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "middle-container"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -4618,13 +4605,12 @@ var sessionErrorsReducer = function sessionErrorsReducer() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_session_actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../actions/session_actions */ "./frontend/actions/session_actions.js");
 
-
-var _nullUser = Object.freeze({
+var nullUser = Object.freeze({
   id: null
 });
 
 var sessionReducer = function sessionReducer() {
-  var oldState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _nullUser;
+  var oldState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : nullUser;
   var action = arguments.length > 1 ? arguments[1] : undefined;
   Object.freeze(oldState);
   var newState = Object.assign({}, oldState);
@@ -4636,7 +4622,7 @@ var sessionReducer = function sessionReducer() {
       });
 
     case _actions_session_actions__WEBPACK_IMPORTED_MODULE_0__["LOGOUT_CURRENT_USER"]:
-      return _nullUser;
+      return nullUser;
 
     default:
       return newState;
