@@ -136,7 +136,6 @@ const MainBody = ({
 			
 			const currentPage = handleLocalStorage('getCurrentPage');
 			if (currentPage?.id === mainBodyDevo.id) {
-				console.log(currentPage.id, mainBodyDevo.id)
 				setBookmarkId(currentPage.bookmarkId);
 				setIsBookmarked(true);
 			} else {

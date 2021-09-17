@@ -1810,7 +1810,6 @@ var MainBody = function MainBody(_ref) {
       var currentPage = handleLocalStorage('getCurrentPage');
 
       if ((currentPage === null || currentPage === void 0 ? void 0 : currentPage.id) === mainBodyDevo.id) {
-        console.log(currentPage.id, mainBodyDevo.id);
         setBookmarkId(currentPage.bookmarkId);
         setIsBookmarked(true);
       } else {
